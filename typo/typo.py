@@ -10,6 +10,7 @@ from reducer import (
     typo_reducer,
 )
 
+
 class Game:
     def __init__(self):
         pyxel.init(160, 120)
@@ -26,13 +27,17 @@ class Game:
             self.dispatch(SET_WORD, word=choice(self.state['all_words']))
         else:
             for character, key in self.character_map.items():
-                if self.state['current_word'][self.state['position']] == character and pyxel.btnp(key):
+                if character == self.current_character and pyxel.btnp(key):
                     self.dispatch(TYPE_CHARACTER)
                     break
 
     @property
     def word_complete(self):
         return self.state['position'] == len(self.state['current_word'])
+
+    @property
+    def current_character(self):
+        return self.state['current_word'][self.state['position']]
 
     @property
     def character_map(self):
