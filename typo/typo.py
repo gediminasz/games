@@ -4,14 +4,18 @@ from random import choice
 import pyxel
 
 from reducer import (
+    END_GAME,
     initial_state,
+    NEXT_WORD,
     SCENE_GAME,
     SCENE_START,
-    SET_WORD,
     START_GAME,
     TYPE_CHARACTER,
     typo_reducer,
 )
+
+
+WORD_COUNT = 5
 
 
 class Game:
@@ -26,16 +30,21 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if self.state['current_scene'] == SCENE_START and pyxel.btnp(pyxel.KEY_SPACE):
-            self.dispatch(START_GAME)
+        if self.state['current_scene'] == SCENE_START:
+            if pyxel.btnp(pyxel.KEY_SPACE):
+                self.dispatch(START_GAME)
 
-        if self.word_complete:
-            self.dispatch(SET_WORD, word=choice(self.state['all_words']))
-        else:
-            for character, key in self.character_map.items():
-                if character == self.current_character and pyxel.btnp(key):
-                    self.dispatch(TYPE_CHARACTER)
-                    break
+        if self.state['current_scene'] == SCENE_GAME:
+            if self.word_complete:
+                if self.state['count'] == WORD_COUNT:
+                    self.dispatch(END_GAME)
+                else:
+                    self.dispatch(NEXT_WORD, word=choice(self.state['all_words']))
+            else:
+                for character, key in self.character_map.items():
+                    if character == self.current_character and pyxel.btnp(key):
+                        self.dispatch(TYPE_CHARACTER)
+                        break
 
     @property
     def word_complete(self):
