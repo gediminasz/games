@@ -2,13 +2,12 @@ from copy import copy
 from types import SimpleNamespace
 
 import actions
+import constants
 
-SCENE_START = 'SCENE_START'
-SCENE_GAME = 'SCENE_GAME'
 
 def initial_state():
     return {
-        'current_scene': SCENE_START,
+        'current_scene': constants.SCENE_START,
         'all_words': load_words('words.txt'),
         'start_time': None,
         'end_time': None,
@@ -25,7 +24,7 @@ def typo_reducer(state, action_type, **kwargs):
     if action_type == actions.START_GAME:
         return {
             **state,
-            'current_scene': SCENE_GAME,
+            'current_scene': constants.SCENE_GAME,
             'start_time': kwargs['time'],
             'current_word': '',
             'position': 0,
@@ -35,7 +34,7 @@ def typo_reducer(state, action_type, **kwargs):
     elif action_type == actions.END_GAME:
         return {
             **state,
-            'current_scene': SCENE_START,
+            'current_scene': constants.SCENE_START,
             'end_time': kwargs['time']
         }
 

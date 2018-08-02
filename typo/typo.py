@@ -3,16 +3,9 @@ import time
 
 import pyxel
 
-from reducer import (
-    initial_state,
-    SCENE_GAME,
-    SCENE_START,
-    typo_reducer,
-)
+from reducer import initial_state, typo_reducer
 import actions
-
-
-WORD_COUNT = 5
+import constants
 
 
 class Game:
@@ -27,13 +20,13 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if self.state['current_scene'] == SCENE_START:
+        if self.state['current_scene'] == constants.SCENE_START:
             if pyxel.btnp(pyxel.KEY_SPACE):
                 self.dispatch(actions.START_GAME, time=time.time())
 
-        if self.state['current_scene'] == SCENE_GAME:
+        if self.state['current_scene'] == constants.SCENE_GAME:
             if self.word_complete:
-                if self.state['count'] == WORD_COUNT:
+                if self.state['count'] == constants.WORD_COUNT:
                     self.dispatch(actions.END_GAME, time=time.time())
                 else:
                     self.dispatch(actions.NEXT_WORD, word=choice(self.state['all_words']))
@@ -85,15 +78,15 @@ class Game:
     def draw(self):
         pyxel.cls(0)
 
-        if self.state['current_scene'] == SCENE_START:
+        if self.state['current_scene'] == constants.SCENE_START:
             pyxel.text(70, 40, 'TYPO', 3)
             pyxel.text(35, 60, 'Press <space> to start', 7)
 
             if self.state['count']:
-                wpm = WORD_COUNT / (self.state['end_time'] - self.state['start_time']) * 60
+                wpm = constants.WORD_COUNT / (self.state['end_time'] - self.state['start_time']) * 60
                 pyxel.text(45, 80, f'Last WPM: {wpm:.2f}', 7)
 
-        elif self.state['current_scene'] == SCENE_GAME:
+        elif self.state['current_scene'] == constants.SCENE_GAME:
             current_word = self.state['current_word'].upper()
             pyxel.text(10, 10, current_word, 7)
             pyxel.text(10, 10, current_word[:self.state['position']], 5)
