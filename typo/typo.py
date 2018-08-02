@@ -59,7 +59,7 @@ class Game:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.text(10, 10, str(self.state['remaining_input']), 7)
+        pyxel.text(10, 10, self.state['remaining_input'].upper(), 7)
 
 
 if __name__ == '__main__':
