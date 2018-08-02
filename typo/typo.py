@@ -92,6 +92,10 @@ class Game:
             pyxel.text(70, 40, 'TYPO', 3)
             pyxel.text(35, 60, 'Press <space> to start', 7)
 
+            if self.state['count']:
+                wpm = WORD_COUNT / (self.state['end_time'] - self.state['start_time']) * 60
+                pyxel.text(45, 80, f'Last WPM: {wpm:.2f}', 7)
+
         elif self.state['current_scene'] == SCENE_GAME:
             current_word = self.state['current_word'].upper()
             pyxel.text(10, 10, current_word, 7)
