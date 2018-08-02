@@ -63,7 +63,9 @@ class Game:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.text(10, 10, self.state['current_word'].upper(), 7)
+        current_word = self.state['current_word'].upper()
+        pyxel.text(10, 10, current_word, 7)
+        pyxel.text(10, 10, current_word[:self.state['position']], 5)
 
 
 if __name__ == '__main__':
