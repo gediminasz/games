@@ -3,27 +3,31 @@ from random import choice
 
 import pyxel
 
-import reducer
+from reducer import (
+    initial_state,
+    SET_WORD,
+    TYPE_CHARACTER,
+    typo_reducer,
+)
 
 class Game:
     def __init__(self):
         pyxel.init(160, 120)
-        self.state = reducer.initial_state()
+        self.state = initial_state()
+
+    def dispatch(self, action_type, **kwargs):
+        self.state = typo_reducer(self.state, action_type, **kwargs)
 
     def run(self):
         pyxel.run(self.update, self.draw)
 
     def update(self):
         if self.word_complete:
-            self.state = reducer.typo_reducer(
-                self.state,
-                reducer.SET_WORD,
-                word=choice(self.state['all_words'])
-            )
+            self.dispatch(SET_WORD, word=choice(self.state['all_words']))
         else:
             for character, key in self.character_map.items():
                 if self.state['current_word'][self.state['position']] == character and pyxel.btnp(key):
-                    self.state = reducer.typo_reducer(self.state, reducer.TYPE_CHARACTER)
+                    self.dispatch(TYPE_CHARACTER)
                     break
 
     @property
