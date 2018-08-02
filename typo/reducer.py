@@ -1,11 +1,7 @@
 from copy import copy
 from types import SimpleNamespace
 
-START_GAME = 'START_GAME'
-END_GAME = 'END_GAME'
-
-TYPE_CHARACTER = 'TYPE_CHARACTER'
-NEXT_WORD = 'NEXT_WORD'
+import actions
 
 SCENE_START = 'SCENE_START'
 SCENE_GAME = 'SCENE_GAME'
@@ -26,7 +22,7 @@ def load_words(source):
         return f.read().split()
 
 def typo_reducer(state, action_type, **kwargs):
-    if action_type == START_GAME:
+    if action_type == actions.START_GAME:
         return {
             **state,
             'current_scene': SCENE_GAME,
@@ -36,17 +32,17 @@ def typo_reducer(state, action_type, **kwargs):
             'count': 0,
         }
 
-    elif action_type == END_GAME:
+    elif action_type == actions.END_GAME:
         return {
             **state,
             'current_scene': SCENE_START,
             'end_time': kwargs['time']
         }
 
-    elif action_type == TYPE_CHARACTER:
+    elif action_type == actions.TYPE_CHARACTER:
         return {**state, 'position': state['position'] + 1}
 
-    elif action_type == NEXT_WORD:
+    elif action_type == actions.NEXT_WORD:
         return {
             **state,
             'current_word': kwargs['word'],

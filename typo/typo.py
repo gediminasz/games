@@ -4,15 +4,12 @@ import time
 import pyxel
 
 from reducer import (
-    END_GAME,
     initial_state,
-    NEXT_WORD,
     SCENE_GAME,
     SCENE_START,
-    START_GAME,
-    TYPE_CHARACTER,
     typo_reducer,
 )
+import actions
 
 
 WORD_COUNT = 5
@@ -32,18 +29,18 @@ class Game:
     def update(self):
         if self.state['current_scene'] == SCENE_START:
             if pyxel.btnp(pyxel.KEY_SPACE):
-                self.dispatch(START_GAME, time=time.time())
+                self.dispatch(actions.START_GAME, time=time.time())
 
         if self.state['current_scene'] == SCENE_GAME:
             if self.word_complete:
                 if self.state['count'] == WORD_COUNT:
-                    self.dispatch(END_GAME, time=time.time())
+                    self.dispatch(actions.END_GAME, time=time.time())
                 else:
-                    self.dispatch(NEXT_WORD, word=choice(self.state['all_words']))
+                    self.dispatch(actions.NEXT_WORD, word=choice(self.state['all_words']))
             else:
                 for character, key in self.character_map.items():
                     if character == self.current_character and pyxel.btnp(key):
-                        self.dispatch(TYPE_CHARACTER)
+                        self.dispatch(actions.TYPE_CHARACTER)
                         break
 
     @property
