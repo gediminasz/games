@@ -1,5 +1,5 @@
-from types import SimpleNamespace
 from random import choice
+import time
 
 import pyxel
 
@@ -32,12 +32,12 @@ class Game:
     def update(self):
         if self.state['current_scene'] == SCENE_START:
             if pyxel.btnp(pyxel.KEY_SPACE):
-                self.dispatch(START_GAME)
+                self.dispatch(START_GAME, time=time.time())
 
         if self.state['current_scene'] == SCENE_GAME:
             if self.word_complete:
                 if self.state['count'] == WORD_COUNT:
-                    self.dispatch(END_GAME)
+                    self.dispatch(END_GAME, time=time.time())
                 else:
                     self.dispatch(NEXT_WORD, word=choice(self.state['all_words']))
             else:

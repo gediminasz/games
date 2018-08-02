@@ -14,6 +14,8 @@ def initial_state():
     return {
         'current_scene': SCENE_START,
         'all_words': load_words('words.txt'),
+        'start_time': None,
+        'end_time': None,
         'current_word': '',
         'position': 0,
         'count': 0,
@@ -25,12 +27,25 @@ def load_words(source):
 
 def typo_reducer(state, action_type, **kwargs):
     if action_type == START_GAME:
-        return {**initial_state(), 'current_scene': SCENE_GAME}
+        return {
+            **state,
+            'current_scene': SCENE_GAME,
+            'start_time': kwargs['time'],
+            'current_word': '',
+            'position': 0,
+            'count': 0,
+        }
+
     elif action_type == END_GAME:
-        return {**state, 'current_scene': SCENE_START}
+        return {
+            **state,
+            'current_scene': SCENE_START,
+            'end_time': kwargs['time']
+        }
 
     elif action_type == TYPE_CHARACTER:
         return {**state, 'position': state['position'] + 1}
+
     elif action_type == NEXT_WORD:
         return {
             **state,
