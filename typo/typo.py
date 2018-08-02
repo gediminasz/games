@@ -5,7 +5,10 @@ import pyxel
 
 from reducer import (
     initial_state,
+    SCENE_GAME,
+    SCENE_START,
     SET_WORD,
+    START_GAME,
     TYPE_CHARACTER,
     typo_reducer,
 )
@@ -23,6 +26,9 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        if self.state['current_scene'] == SCENE_START and pyxel.btnp(pyxel.KEY_SPACE):
+            self.dispatch(START_GAME)
+
         if self.word_complete:
             self.dispatch(SET_WORD, word=choice(self.state['all_words']))
         else:
@@ -72,9 +78,15 @@ class Game:
 
     def draw(self):
         pyxel.cls(0)
-        current_word = self.state['current_word'].upper()
-        pyxel.text(10, 10, current_word, 7)
-        pyxel.text(10, 10, current_word[:self.state['position']], 5)
+
+        if self.state['current_scene'] == SCENE_START:
+            pyxel.text(70, 40, 'TYPO', 3)
+            pyxel.text(35, 60, 'Press <space> to start', 7)
+
+        elif self.state['current_scene'] == SCENE_GAME:
+            current_word = self.state['current_word'].upper()
+            pyxel.text(10, 10, current_word, 7)
+            pyxel.text(10, 10, current_word[:self.state['position']], 5)
 
 
 if __name__ == '__main__':
