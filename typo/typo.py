@@ -3,37 +3,28 @@ from random import choice
 
 import pyxel
 
+import reducer
+
 class Game:
     def __init__(self):
         pyxel.init(160, 120)
-
-        self.state = SimpleNamespace(
-            all_words=self.load_words('words.txt'),
-            remaining_input='',
-            words_typed=1
-        )
-
-    def load_words(self, source):
-        with open(source, 'r') as f:
-            return f.read().split()
+        self.state = reducer.initial_state()
 
     def run(self):
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if self.state.remaining_input:
+        if self.state['remaining_input']:
             for character, key in self.character_map.items():
-                if self.state.remaining_input[0] == character and pyxel.btnp(key):
-                    self.state.remaining_input = self.state.remaining_input[1:]
+                if self.state['remaining_input'][0] == character and pyxel.btnp(key):
+                    self.state = reducer.typo_reducer(self.state, reducer.TYPE_CHARACTER)
                     break
-
         else:
-            self.state.words_typed += 1
-            self.state.remaining_input = choice(self.state.all_words)
-
-    def draw(self):
-        pyxel.cls(0)
-        pyxel.text(10, 10, str(self.state.remaining_input), 7)
+            self.state = reducer.typo_reducer(
+                self.state,
+                reducer.SET_WORD,
+                word=choice(self.state['all_words'])
+            )
 
     @property
     def character_map(self):
@@ -65,6 +56,10 @@ class Game:
             'y': pyxel.KEY_Y,
             'z': pyxel.KEY_Z,
         }
+
+    def draw(self):
+        pyxel.cls(0)
+        pyxel.text(10, 10, str(self.state['remaining_input']), 7)
 
 
 if __name__ == '__main__':
