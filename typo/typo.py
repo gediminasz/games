@@ -14,17 +14,21 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if self.state['remaining_input']:
-            for character, key in self.character_map.items():
-                if self.state['remaining_input'][0] == character and pyxel.btnp(key):
-                    self.state = reducer.typo_reducer(self.state, reducer.TYPE_CHARACTER)
-                    break
-        else:
+        if self.word_complete:
             self.state = reducer.typo_reducer(
                 self.state,
                 reducer.SET_WORD,
                 word=choice(self.state['all_words'])
             )
+        else:
+            for character, key in self.character_map.items():
+                if self.state['current_word'][self.state['position']] == character and pyxel.btnp(key):
+                    self.state = reducer.typo_reducer(self.state, reducer.TYPE_CHARACTER)
+                    break
+
+    @property
+    def word_complete(self):
+        return self.state['position'] == len(self.state['current_word'])
 
     @property
     def character_map(self):
@@ -59,7 +63,7 @@ class Game:
 
     def draw(self):
         pyxel.cls(0)
-        pyxel.text(10, 10, self.state['remaining_input'].upper(), 7)
+        pyxel.text(10, 10, self.state['current_word'].upper(), 7)
 
 
 if __name__ == '__main__':

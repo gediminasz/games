@@ -7,8 +7,8 @@ SET_WORD = 'SET_WORD'
 def initial_state():
     return {
         'all_words': load_words('words.txt'),
-        'remaining_input': '',
-        'words_typed': 0
+        'current_word': '',
+        'position': 0
     }
 
 def load_words(source):
@@ -17,6 +17,6 @@ def load_words(source):
 
 def typo_reducer(state, action_type, **kwargs):
     if action_type == TYPE_CHARACTER:
-        return {**state, 'remaining_input': state['remaining_input'][1:]}
+        return {**state, 'position': state['position'] + 1}
     elif action_type == SET_WORD:
-        return {**state, 'remaining_input': kwargs['word']}
+        return {**state, 'current_word': kwargs['word'], 'position': 0}
