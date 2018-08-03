@@ -14,7 +14,7 @@ class GameScene:
             if state['count'] == constants.WORD_COUNT:
                 dispatch(actions.END_GAME, time=time.time())
             else:
-                dispatch(actions.NEXT_WORD, word=choice(state['all_words']))
+                dispatch(actions.NEXT_WORD, word=choice(constants.ALL_WORDS))
         else:
             current_character = state['current_word'][state['position']]
             for character, key in self.character_map.items():

@@ -8,7 +8,6 @@ import constants
 def initial_state():
     return {
         'current_scene': constants.SCENE_START,
-        'all_words': constants.ALL_WORDS,
         'start_time': None,
         'end_time': None,
         'current_word': '',
