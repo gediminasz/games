@@ -12,13 +12,15 @@ def initial_state():
         'current_word': None,
         'position': None,
         'count': None,
+        'wpm': None,
     }
 
-def typo_reducer(state, action_type, **kwargs):
+
+def reducer(state, action_type, **kwargs):
     if action_type == actions.LAUNCH:
         return {**state, 'current_scene': constants.SCENE_START}
 
-    elif action_type == actions.START_GAME:
+    if action_type == actions.START_GAME:
         return {
             **state,
             'current_scene': constants.SCENE_GAME,
@@ -28,20 +30,26 @@ def typo_reducer(state, action_type, **kwargs):
             'count': 0,
         }
 
-    elif action_type == actions.END_GAME:
+    if action_type == actions.END_GAME:
         return {
             **state,
             'current_scene': constants.SCENE_START,
-            'end_time': kwargs['time']
+            'end_time': kwargs['time'],
+            'wpm': (
+                constants.WORD_COUNT /
+                (kwargs['time'] - state['start_time']) * 60
+            )
         }
 
-    elif action_type == actions.TYPE_CHARACTER:
+    if action_type == actions.TYPE_CHARACTER:
         return {**state, 'position': state['position'] + 1}
 
-    elif action_type == actions.NEXT_WORD:
+    if action_type == actions.NEXT_WORD:
         return {
             **state,
             'current_word': kwargs['word'],
             'position': 0,
             'count': state['count'] + 1
         }
+
+    return state

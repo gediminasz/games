@@ -1,6 +1,6 @@
 import pyxel
 
-from reducer import initial_state, typo_reducer
+from reducer import initial_state, reducer
 from scenes.game import GameScene
 from scenes.start import StartScene
 import actions
@@ -16,13 +16,14 @@ SCENES_MAP = {
 class Game:
     def __init__(self):
         pyxel.init(160, 120)
+
         self.state = initial_state()
         self.scene = None
 
         self.dispatch(actions.LAUNCH)
 
     def dispatch(self, action_type, **kwargs):
-        new_state = typo_reducer(self.state, action_type, **kwargs)
+        new_state = reducer(self.state, action_type, **kwargs)
         self.change_scene(new_state['current_scene'])
         self.state = new_state
 

@@ -14,9 +14,5 @@ class StartScene:
         pyxel.text(70, 40, 'TYPO', 3)
         pyxel.text(35, 60, 'Press <space> to start', 7)
 
-        if state['count']:
-            wpm = (
-                constants.WORD_COUNT /
-                (state['end_time'] - state['start_time']) * 60
-            )
-            pyxel.text(45, 80, f'Last WPM: {wpm:.2f}', 7)
+        if state['wpm']:
+            pyxel.text(45, 80, f"Last WPM: {state['wpm']:.2f}", 7)
