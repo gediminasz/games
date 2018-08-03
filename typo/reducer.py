@@ -1,5 +1,4 @@
-from copy import copy
-from types import SimpleNamespace
+from collections import defaultdict
 
 import actions
 import constants
@@ -7,16 +6,19 @@ import constants
 
 def initial_state():
     return {
-        'current_scene': constants.SCENE_START,
+        'current_scene': None,
         'start_time': None,
         'end_time': None,
-        'current_word': '',
-        'position': 0,
-        'count': 0,
+        'current_word': None,
+        'position': None,
+        'count': None,
     }
 
 def typo_reducer(state, action_type, **kwargs):
-    if action_type == actions.START_GAME:
+    if action_type == actions.LAUNCH:
+        return {**state, 'current_scene': constants.SCENE_START}
+
+    elif action_type == actions.START_GAME:
         return {
             **state,
             'current_scene': constants.SCENE_GAME,
