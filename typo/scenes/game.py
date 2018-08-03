@@ -1,0 +1,59 @@
+from random import choice
+import time
+
+import pyxel
+
+import actions
+import constants
+
+
+class GameScene:
+    def update(self, state, dispatch):
+        word_complete = state['position'] == len(state['current_word'])
+        if word_complete:
+            if state['count'] == constants.WORD_COUNT:
+                dispatch(actions.END_GAME, time=time.time())
+            else:
+                dispatch(actions.NEXT_WORD, word=choice(state['all_words']))
+        else:
+            current_character = state['current_word'][state['position']]
+            for character, key in self.character_map.items():
+                if character == current_character and pyxel.btnp(key):
+                    dispatch(actions.TYPE_CHARACTER)
+                    break
+
+    def draw(self, state):
+        current_word = state['current_word'].upper()
+        pyxel.text(10, 10, current_word, 7)
+        pyxel.text(10, 10, current_word[:state['position']], 5)
+
+    @property
+    def character_map(self):
+        return {
+            'a': pyxel.KEY_A,
+            'b': pyxel.KEY_B,
+            'c': pyxel.KEY_C,
+            'd': pyxel.KEY_D,
+            'e': pyxel.KEY_E,
+            'f': pyxel.KEY_F,
+            'g': pyxel.KEY_G,
+            'h': pyxel.KEY_H,
+            'i': pyxel.KEY_I,
+            'j': pyxel.KEY_J,
+            'k': pyxel.KEY_K,
+            'l': pyxel.KEY_L,
+            'm': pyxel.KEY_M,
+            'n': pyxel.KEY_N,
+            'o': pyxel.KEY_O,
+            'p': pyxel.KEY_P,
+            'q': pyxel.KEY_Q,
+            'r': pyxel.KEY_R,
+            's': pyxel.KEY_S,
+            't': pyxel.KEY_T,
+            'u': pyxel.KEY_U,
+            'v': pyxel.KEY_V,
+            'w': pyxel.KEY_W,
+            'x': pyxel.KEY_X,
+            'y': pyxel.KEY_Y,
+            'z': pyxel.KEY_Z,
+        }
