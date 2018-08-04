@@ -18,10 +18,14 @@ class GameScene:
 
         else:
             current_character = state['current_word'][state['position']]
-            for character, key in self.character_map.items():
-                if character == current_character and pyxel.btnp(key):
-                    dispatch(actions.TYPE_CHARACTER)
-                    break
+            if self.input_character == current_character:
+                dispatch(actions.TYPE_CHARACTER)
+
+    @property
+    def input_character(self):
+        for character, key in self.character_map.items():
+            if pyxel.btnp(key):
+                return character
 
     def draw(self, state):
         current_word = state['current_word'].upper()
