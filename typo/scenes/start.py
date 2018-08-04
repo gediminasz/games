@@ -19,4 +19,6 @@ class StartScene:
         pyxel.text(55, 70, '<Q> to quit', 7)
 
         if state['wpm']:
-            pyxel.text(45, 80, f"Last WPM: {state['wpm']:.2f}", 7)
+            pyxel.text(45, 90, f"Last WPM: {state['wpm']:.2f}", 7)
+        if state['accuracy']:
+            pyxel.text(45, 100, f"Accuracy: {state['accuracy'] * 100:.2f}%", 7)

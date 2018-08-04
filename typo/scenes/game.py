@@ -18,8 +18,10 @@ class GameScene:
 
         else:
             current_character = state['current_word'][state['position']]
-            if self.input_character == current_character:
+            if self.input_character:
                 dispatch(actions.TYPE_CHARACTER)
+                if self.input_character == current_character:
+                    dispatch(actions.HIT_CHARACTER)
 
     @property
     def input_character(self):
