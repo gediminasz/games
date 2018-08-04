@@ -12,9 +12,7 @@ def initial_state():
         'current_word': None,
         'position': None,
         'words_typed': None,
-
         'characters_typed': None,
-        'characters_hit': None,
 
         'wpm': None,
         'accuracy': None,
