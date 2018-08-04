@@ -1,8 +1,8 @@
-from random import choice
 import time
 
 import pyxel
 
+from words import next_word
 import actions
 import constants
 
@@ -14,7 +14,7 @@ class GameScene:
             if state['count'] == constants.WORD_COUNT:
                 dispatch(actions.END_GAME, time=time.time())
             else:
-                dispatch(actions.NEXT_WORD, word=choice(constants.ALL_WORDS))
+                dispatch(actions.NEXT_WORD, word=next_word())
 
         else:
             current_character = state['current_word'][state['position']]

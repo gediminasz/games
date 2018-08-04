@@ -1,6 +1,7 @@
 import time
 import pyxel
 
+from words import next_word
 import actions
 import constants
 
@@ -8,7 +9,7 @@ import constants
 class StartScene:
     def update(self, state, dispatch):
         if pyxel.btnp(pyxel.KEY_SPACE):
-            dispatch(actions.START_GAME, time=time.time())
+            dispatch(actions.START_GAME, time=time.time(), word=next_word())
         elif pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
 

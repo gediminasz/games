@@ -25,7 +25,7 @@ def reducer(state, action_type, **kwargs):
             **state,
             'current_scene': constants.SCENE_GAME,
             'start_time': kwargs['time'],
-            'current_word': '',
+            'current_word': kwargs['word'],
             'position': 0,
             'count': 0,
         }
