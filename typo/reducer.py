@@ -14,6 +14,8 @@ def initial_state():
         'words_typed': None,
         'characters_typed': None,
 
+        'points': None,
+
         'wpm': None,
         'accuracy': None,
     }
@@ -32,6 +34,7 @@ def reducer(state, action_type, **kwargs):
             'position': 0,
             'words_typed': (),
             'characters_typed': 0,
+            'points': 0,
         }
 
     if action_type == actions.END_GAME:
@@ -47,7 +50,11 @@ def reducer(state, action_type, **kwargs):
         return {**state, 'characters_typed': state['characters_typed'] + 1}
 
     if action_type == actions.HIT_CHARACTER:
-        return {**state, 'position': state['position'] + 1}
+        return {
+            **state,
+            'position': state['position'] + 1,
+            'points': state['points'] + 1
+        }
 
     if action_type == actions.NEXT_WORD:
         return {

@@ -21,3 +21,5 @@ class StartScene:
             pyxel.text(45, 90, f"Last WPM: {state['wpm']:.2f}", 7)
         if state['accuracy']:
             pyxel.text(45, 100, f"Accuracy: {state['accuracy'] * 100:.2f}%", 7)
+        if state['points']:
+            pyxel.text(45, 110, f"Points: {state['points']}", 7)
