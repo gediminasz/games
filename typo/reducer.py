@@ -11,7 +11,7 @@ def initial_state():
 
         'current_word': None,
         'position': None,
-        'count': None,
+        'words_typed': None,
 
         'characters_typed': None,
         'characters_hit': None,
@@ -32,9 +32,8 @@ def reducer(state, action_type, **kwargs):
             'start_time': kwargs['time'],
             'current_word': kwargs['word'],
             'position': 0,
-            'count': 0,
+            'words_typed': (),
             'characters_typed': 0,
-            'characters_hit': 0,
         }
 
     if action_type == actions.END_GAME:
@@ -42,29 +41,22 @@ def reducer(state, action_type, **kwargs):
             **state,
             'current_scene': constants.SCENE_START,
             'end_time': kwargs['time'],
-            'wpm': (
-                constants.WORD_COUNT /
-                (kwargs['time'] - state['start_time']) * 60
-            ),
-            'accuracy': state['characters_hit'] / state['characters_typed']
+            'wpm': constants.WORD_COUNT / (kwargs['time'] - state['start_time']) * 60,
+            'accuracy': sum(map(len, state['words_typed'])) / state['characters_typed']
         }
 
     if action_type == actions.TYPE_CHARACTER:
         return {**state, 'characters_typed': state['characters_typed'] + 1}
 
     if action_type == actions.HIT_CHARACTER:
-        return {
-            **state,
-            'position': state['position'] + 1,
-            'characters_hit': state['characters_hit'] + 1,
-        }
+        return {**state, 'position': state['position'] + 1}
 
     if action_type == actions.NEXT_WORD:
         return {
             **state,
             'current_word': kwargs['word'],
             'position': 0,
-            'count': state['count'] + 1
+            'words_typed': state['words_typed'] + (state['current_word'],)
         }
 
     return state
