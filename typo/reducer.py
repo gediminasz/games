@@ -58,13 +58,18 @@ def reducer(state, action_type, **kwargs):
             'points': state['points'] + 1 * state['multiplier']
         }
 
+    if action_type == actions.COMPLETE_WORD:
+        return {
+            **state,
+            'words_typed': state['words_typed'] + (state['current_word'],),
+            'multiplier': state['multiplier'] + 1,
+        }
+
     if action_type == actions.NEXT_WORD:
         return {
             **state,
             'current_word': kwargs['word'],
             'position': 0,
-            'words_typed': state['words_typed'] + (state['current_word'],),
-            'multiplier': state['multiplier'] + 1,
         }
 
     return state

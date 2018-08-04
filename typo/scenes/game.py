@@ -11,6 +11,8 @@ class GameScene:
     def update(self, state, dispatch):
         word_complete = state['position'] == len(state['current_word'])
         if word_complete:
+            state = dispatch(actions.COMPLETE_WORD)
+
             if len(state['words_typed']) == constants.WORD_COUNT:
                 dispatch(actions.END_GAME, time=time.time())
             else:

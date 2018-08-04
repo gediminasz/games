@@ -23,9 +23,12 @@ class Game:
         self.dispatch(actions.LAUNCH)
 
     def dispatch(self, action_type, **kwargs):
+        print(action_type, kwargs)
+
         new_state = reducer(self.state, action_type, **kwargs)
         self.change_scene(new_state['current_scene'])
         self.state = new_state
+        return new_state
 
     def change_scene(self, scene_name):
         if scene_name != self.state['current_scene']:
