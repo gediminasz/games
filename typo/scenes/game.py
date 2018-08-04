@@ -24,6 +24,8 @@ class GameScene:
                 dispatch(actions.TYPE_CHARACTER)
                 if self.input_character == current_character:
                     dispatch(actions.HIT_CHARACTER)
+                else:
+                    dispatch(actions.MISS_CHARACTER)
 
     @property
     def input_character(self):

@@ -58,6 +58,9 @@ def reducer(state, action_type, **kwargs):
             'points': state['points'] + 1 * state['multiplier']
         }
 
+    if action_type == actions.MISS_CHARACTER:
+        return {**state, 'multiplier': 1}
+
     if action_type == actions.COMPLETE_WORD:
         return {
             **state,
