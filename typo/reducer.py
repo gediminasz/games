@@ -15,6 +15,7 @@ def initial_state():
         'characters_typed': None,
 
         'points': None,
+        'multiplier': None,
 
         'wpm': None,
         'accuracy': None,
@@ -35,6 +36,7 @@ def reducer(state, action_type, **kwargs):
             'words_typed': (),
             'characters_typed': 0,
             'points': 0,
+            'multiplier': 1,
         }
 
     if action_type == actions.END_GAME:
@@ -53,7 +55,7 @@ def reducer(state, action_type, **kwargs):
         return {
             **state,
             'position': state['position'] + 1,
-            'points': state['points'] + 1
+            'points': state['points'] + 1 * state['multiplier']
         }
 
     if action_type == actions.NEXT_WORD:
@@ -61,7 +63,8 @@ def reducer(state, action_type, **kwargs):
             **state,
             'current_word': kwargs['word'],
             'position': 0,
-            'words_typed': state['words_typed'] + (state['current_word'],)
+            'words_typed': state['words_typed'] + (state['current_word'],),
+            'multiplier': state['multiplier'] + 1,
         }
 
     return state
