@@ -1,18 +1,11 @@
-import importlib
-
 import pyxel
 
+from reloader import Reloader
 from store import Store
 import actions
 import constants
 import scenes.game
 import scenes.start
-
-
-HOT_MODULES = (
-    scenes.start,
-    scenes.game
-)
 
 
 class Game:
@@ -21,6 +14,11 @@ class Game:
 
         self.store = Store()
         self.store.subscribe(self.change_scene)
+
+        self.reloader = Reloader((
+            scenes.start,
+            scenes.game
+        ))
 
         self.scene = None
 
@@ -31,9 +29,7 @@ class Game:
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_F1):
-            print('Reloading...')
-            for module in HOT_MODULES:
-                importlib.reload(module)
+            self.reloader.reload()
             self.scene = self.build_scene(self.store.state['current_scene'])
 
         self.scene.update(self.store.state, self.store.dispatch)
