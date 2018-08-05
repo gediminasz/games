@@ -2,11 +2,11 @@ import importlib
 
 import pyxel
 
-from reducer import initial_state, reducer
+from store import Store
 import actions
 import constants
-import scenes.start
 import scenes.game
+import scenes.start
 
 
 HOT_MODULES = (
@@ -19,10 +19,12 @@ class Game:
     def __init__(self):
         pyxel.init(160, 120)
 
-        self.state = initial_state()
+        self.store = Store()
+        self.store.subscribe(self.change_scene)
+
         self.scene = None
 
-        self.dispatch(actions.LAUNCH)
+        self.store.dispatch(actions.LAUNCH)
 
     def run(self):
         pyxel.run(self.update, self.draw)
@@ -32,25 +34,17 @@ class Game:
             print('Reloading...')
             for module in HOT_MODULES:
                 importlib.reload(module)
-            self.scene = self.build_scene(self.state['current_scene'])
+            self.scene = self.build_scene(self.store.state['current_scene'])
 
-        self.scene.update(self.state, self.dispatch)
+        self.scene.update(self.store.state, self.store.dispatch)
 
     def draw(self):
         pyxel.cls(0)
-        self.scene.draw(self.state)
+        self.scene.draw(self.store.state)
 
-    def dispatch(self, action_type, **kwargs):
-        print(action_type, kwargs)
-
-        new_state = reducer(self.state, action_type, **kwargs)
-        self.change_scene(new_state['current_scene'])
-        self.state = new_state
-        return new_state
-
-    def change_scene(self, scene_name):
-        if scene_name != self.state['current_scene']:
-            self.scene = self.build_scene(scene_name)
+    def change_scene(self, old_state, new_state):
+        if new_state['current_scene'] != old_state['current_scene']:
+            self.scene = self.build_scene(new_state['current_scene'])
 
     def build_scene(self, name):
         return self.scenes_map[name]()
