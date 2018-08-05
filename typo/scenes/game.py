@@ -35,9 +35,9 @@ class GameScene:
 
     def draw(self, state):
         current_word = state['current_word'].upper()
-        pyxel.text(10, 10, current_word, 7)
-        pyxel.text(10, 10, current_word[:state['position']], 5)
-        pyxel.text(10, 20, f"{state['points']} (x{state['multiplier']})", 8)
+        pyxel.text(10, 60, current_word, 7)
+        pyxel.text(10, 60, current_word[:state['position']], 5)
+        pyxel.text(10, 10, f"{state['points']} (x{state['multiplier']})", 8)
 
     @property
     def character_map(self):
