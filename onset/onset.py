@@ -29,6 +29,8 @@ class Game:
         self.start_time = None
         self.playing = False
 
+        self.fret = 0
+        self.percentiles = [0.2, 0.4, 0.6, 0.8, 1]
 
     def run(self):
         pyxel.run(self.update, self.draw)
@@ -46,6 +48,11 @@ class Game:
                 if frame < len(self.onset_envelope):
                     self.current_onset_strength = self.onset_envelope[frame]
 
+                for i, p in enumerate(self.percentiles):
+                    if self.current_onset_strength < p:
+                        self.fret = i
+                        break
+
     def draw(self):
         pyxel.cls(0)
 
@@ -56,6 +63,8 @@ class Game:
         strength = int(100 * self.current_onset_strength)
         pyxel.text(10, 30, f'{strength}', 8)
         pyxel.rect(30, 30, 30 + strength, 40, 8)
+
+        pyxel.rect(10 + self.fret * 10, 50, 20 + self.fret * 10, 60, 8 + self.fret)
 
 
 if __name__ == '__main__':

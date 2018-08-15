@@ -1,5 +1,5 @@
-pyxel
-playsound
 librosa
+playsound
+pyxel
 
 # also ffmpeg https://www.ffmpeg.org/
