@@ -1,0 +1,5 @@
+pyxel
+playsound
+librosa
+
+# also ffmpeg https://www.ffmpeg.org/
