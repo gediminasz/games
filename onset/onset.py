@@ -12,7 +12,7 @@ AUDIO_FILE = sys.argv[1]
 
 class Game:
     def __init__(self):
-        pyxel.init(160, 120)
+        pyxel.init(160, 120, fps=60)
 
         self.tabs = load_tabs(AUDIO_FILE)
 
@@ -39,12 +39,13 @@ class Game:
     def draw(self):
         pyxel.cls(0)
 
-
         for i, _ in enumerate(FRETS):
             self.draw_fret(i, pyxel.rectb)
 
         if self.fret is not None:
             self.draw_fret(self.fret, pyxel.rect)
+
+        self.draw_tabs()
 
     def draw_fret(self, i, draw_function):
         width, height = 16, 12
@@ -52,14 +53,36 @@ class Game:
         padding = 1
         base_color = 8
 
-        x = x + i * (width + padding)
+        x_ = x + i * (width + padding)
         draw_function(
-            x,
+            x_,
             y,
-            x + width,
+            x_ + width,
             y + height,
             base_color + i
         )
+
+    def draw_tabs(self):
+        width, height = 16, 8
+        x, y = 40, 100
+        padding = 1
+        base_color = 8
+
+        upcoming_tabs = self.tabs[self.next_tab:self.next_tab + 10]
+
+        for tab in upcoming_tabs:
+            i = fret(tab['strength'])
+            x_ = x + i * (width + padding)
+            y_ = y - int((tab['time'] - self.time) * 100)
+
+            pyxel.rect(
+                x_,
+                y_,
+                x_ + width,
+                y_ + height,
+                base_color + i
+            )
+
 
     @property
     def time(self):
