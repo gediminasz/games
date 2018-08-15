@@ -25,6 +25,7 @@ class Game:
 
         self.next_tab = 0
         self.fret = None
+        self.fret_hit = False
         self.active_frets = (False,) * 5
 
     def run(self):
@@ -34,17 +35,27 @@ class Game:
         if not self.playing:
             self.playing = True
             self.start_time = time()
-            playsound(AUDIO_FILE, block=False)
+            # playsound(AUDIO_FILE, block=False)
 
         else:
             if self.time > self.tabs[self.next_tab]['time']:
                 self.fret = tabs.fret(self.tabs[self.next_tab]['strength'])
+                self.fret_hit = False
                 self.next_tab = min(self.next_tab + 1, len(self.tabs) - 1)
 
-        self.active_frets = map(
-            pyxel.btn,
-            (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5)
-        )
+        self.active_frets = [
+            0 if pyxel.btn(key) else 1
+            for key in (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5)
+        ]
+
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            if self.tabs[self.next_tab]['time'] - self.time < 0.1:
+                print('HIT')
+                if self.active_frets[self.fret] == 0:  # pressed
+                    self.active_frets[self.fret] = 2  # hit
+                    self.fret_hit = True
+            else:
+                print('MISS')
 
     def draw(self):
         pyxel.cls(0)
@@ -52,9 +63,8 @@ class Game:
         for i, _ in enumerate(tabs.FRETS):
             self.draw_fret(i, 1)
 
-        for i, active in enumerate(self.active_frets):
-            if active:
-                self.draw_fret(i, 0)
+        for i, state in enumerate(self.active_frets):
+            self.draw_fret(i, state)
 
         self.draw_incoming_tabs()
 
@@ -81,6 +91,7 @@ class Game:
     @property
     def time(self):
         return time() - self.start_time
+
 
 if __name__ == '__main__':
     Game().run()
