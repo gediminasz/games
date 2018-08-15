@@ -25,6 +25,7 @@ class Game:
 
         self.next_tab = 0
         self.fret = None
+        self.active_frets = (False,) * 5
 
     def run(self):
         pyxel.run(self.update, self.draw)
@@ -40,14 +41,20 @@ class Game:
                 self.fret = tabs.fret(self.tabs[self.next_tab]['strength'])
                 self.next_tab = min(self.next_tab + 1, len(self.tabs) - 1)
 
+        self.active_frets = map(
+            pyxel.btn,
+            (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5)
+        )
+
     def draw(self):
         pyxel.cls(0)
 
         for i, _ in enumerate(tabs.FRETS):
             self.draw_fret(i, 1)
 
-        if self.fret is not None:
-            self.draw_fret(self.fret, 0)
+        for i, active in enumerate(self.active_frets):
+            if active:
+                self.draw_fret(i, 0)
 
         self.draw_incoming_tabs()
 
