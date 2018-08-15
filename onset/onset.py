@@ -8,13 +8,13 @@ import tabs
 
 
 AUDIO_FILE = sys.argv[1]
-FRETS_POSITION = 80, 200
+FRETS_POSITION = 40, 100
 FRET_SIZE = 16, 8
 
 
 class Game:
     def __init__(self):
-        pyxel.init(320, 240, fps=60)
+        pyxel.init(160, 120, fps=60)
 
         pyxel.image(0).load(0, 0, 'assets/frets.png')
 
@@ -64,11 +64,7 @@ class Game:
         _, y = FRETS_POSITION
         for tab in incoming_tabs:
             i = tabs.fret(tab['strength'])
-            self.draw_tab(
-                i,
-                y - int((tab['time'] - self.time) * 60),
-                3
-            )
+            self.draw_tab(i, y - int((tab['time'] - self.time) * 60), 3)
 
     def draw_tab(self, i, y, state):
         x, _ = FRETS_POSITION
