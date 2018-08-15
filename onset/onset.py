@@ -4,17 +4,21 @@ from time import time
 from playsound import playsound
 import pyxel
 
-from tabs import load_tabs, fret, FRETS
+import tabs
 
 
 AUDIO_FILE = sys.argv[1]
+FRETS_POSITION = 80, 200
+FRET_SIZE = 16, 8
 
 
 class Game:
     def __init__(self):
-        pyxel.init(160, 120, fps=60)
+        pyxel.init(320, 240, fps=60)
 
-        self.tabs = load_tabs(AUDIO_FILE)
+        pyxel.image(0).load(0, 0, 'assets/frets.png')
+
+        self.tabs = tabs.load_tabs(AUDIO_FILE)
 
         self.start_time = None
         self.playing = False
@@ -33,56 +37,43 @@ class Game:
 
         else:
             if self.time > self.tabs[self.next_tab]['time']:
-                self.fret = fret(self.tabs[self.next_tab]['strength'])
+                self.fret = tabs.fret(self.tabs[self.next_tab]['strength'])
                 self.next_tab = min(self.next_tab + 1, len(self.tabs) - 1)
 
     def draw(self):
         pyxel.cls(0)
 
-        for i, _ in enumerate(FRETS):
-            self.draw_fret(i, pyxel.rectb)
+        for i, _ in enumerate(tabs.FRETS):
+            self.draw_fret(i, 1)
 
         if self.fret is not None:
-            self.draw_fret(self.fret, pyxel.rect)
+            self.draw_fret(self.fret, 0)
 
-        self.draw_tabs()
+        self.draw_incoming_tabs()
 
-    def draw_fret(self, i, draw_function):
-        width, height = 16, 12
-        x, y = 40, 100
-        padding = 1
-        base_color = 8
+    def draw_fret(self, i, state):
+        _, y = FRETS_POSITION
+        self.draw_tab(i, y, state)
 
-        x_ = x + i * (width + padding)
-        draw_function(
-            x_,
-            y,
-            x_ + width,
-            y + height,
-            base_color + i
-        )
+    def draw_incoming_tabs(self):
+        incoming_tabs = [
+            tab for tab in self.tabs[self.next_tab:]
+            if tab['time'] < self.time + 2  # 2 seconds ahead
+        ]
 
-    def draw_tabs(self):
-        width, height = 16, 8
-        x, y = 40, 100
-        padding = 1
-        base_color = 8
-
-        upcoming_tabs = self.tabs[self.next_tab:self.next_tab + 10]
-
-        for tab in upcoming_tabs:
-            i = fret(tab['strength'])
-            x_ = x + i * (width + padding)
-            y_ = y - int((tab['time'] - self.time) * 100)
-
-            pyxel.rect(
-                x_,
-                y_,
-                x_ + width,
-                y_ + height,
-                base_color + i
+        _, y = FRETS_POSITION
+        for tab in incoming_tabs:
+            i = tabs.fret(tab['strength'])
+            self.draw_tab(
+                i,
+                y - int((tab['time'] - self.time) * 60),
+                3
             )
 
+    def draw_tab(self, i, y, state):
+        x, _ = FRETS_POSITION
+        width, height = FRET_SIZE
+        pyxel.blt(x + i * width, y, 0, i * width, state * height, width, height, 0)
 
     @property
     def time(self):
