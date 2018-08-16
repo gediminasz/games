@@ -1,5 +1,6 @@
 librosa
 playsound
+pygame
 pyxel
 
 # also ffmpeg https://www.ffmpeg.org/

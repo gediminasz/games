@@ -4,6 +4,7 @@ sys.path.append('..')
 from time import time
 
 from playsound import playsound
+import pygame
 import pyxel
 
 from common.store import Store
@@ -40,6 +41,12 @@ class Game:
 
         self.next_tab = 0
 
+        pygame.init()
+        pygame.joystick.init()
+        self.joystick = pygame.joystick.Joystick(0)
+        self.joystick.init()
+        self.previous_strum = self.joystick.get_hat(0)[1]
+
     def run(self):
         pyxel.run(self.update, self.draw)
 
@@ -54,7 +61,17 @@ class Game:
                 frets=[pyxel.btn(key) for key in self.fret_keys]
             )
 
-        if pyxel.btnp(pyxel.KEY_SPACE):
+        pygame.event.pump()
+
+        joystick_frets = [self.joystick.get_button(button) for button in [1, 2, 3, 0, 4]]
+        if joystick_frets != self.store.state['active_frets']:
+            self.store.dispatch(actions.ACTIVATE_FRETS, frets=joystick_frets)
+
+        current_strum = self.joystick.get_hat(0)[1]
+        did_strum = not self.previous_strum and current_strum
+        self.previous_strum = current_strum
+
+        if pyxel.btnp(pyxel.KEY_SPACE) or did_strum:
             if self.note_hit:
                 print('HIT')
             else:
