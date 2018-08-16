@@ -4,9 +4,11 @@ sys.path.append('..')
 import pyxel
 
 from common.reloader import Reloader
+
 from store import Store
 import actions
 import constants
+import reducer
 import scenes.game
 import scenes.start
 
@@ -15,7 +17,7 @@ class Game:
     def __init__(self):
         pyxel.init(160, 120)
 
-        self.store = Store()
+        self.store = Store(reducer.initial_state(), reducer.reducer)
         self.store.subscribe(self.change_scene)
 
         self.reloader = Reloader((
