@@ -8,8 +8,9 @@ import pyxel
 
 from common.store import Store
 
-import tabs
+import actions
 import reducer
+import tabs
 
 
 AUDIO_FILE = sys.argv[1]
@@ -27,9 +28,6 @@ class Game:
 
         self.tabs = tabs.load_tabs(AUDIO_FILE)
 
-        self.start_time = None
-        self.playing = False
-
         self.next_tab = 0
         self.fret = None
         self.fret_hit = False
@@ -39,9 +37,8 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
-        if not self.playing:
-            self.playing = True
-            self.start_time = time()
+        if not self.store.state['playing']:
+            self.store.dispatch(actions.START_GAME, time=time())
             # playsound(AUDIO_FILE, block=False)
 
         else:
@@ -97,7 +94,7 @@ class Game:
 
     @property
     def time(self):
-        return time() - self.start_time
+        return time() - self.store.state['start_time']
 
 
 if __name__ == '__main__':
