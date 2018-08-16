@@ -1,6 +1,9 @@
+import sys
+sys.path.append('..')
+
 import pyxel
 
-from reloader import Reloader
+from common.reloader import Reloader
 from store import Store
 import actions
 import constants
