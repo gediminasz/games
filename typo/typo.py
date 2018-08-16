@@ -4,8 +4,8 @@ sys.path.append('..')
 import pyxel
 
 from common.reloader import Reloader
+from common.store import Store
 
-from store import Store
 import actions
 import constants
 import reducer
