@@ -1,10 +1,15 @@
 import sys
+sys.path.append('..')
+
 from time import time
 
 from playsound import playsound
 import pyxel
 
+from common.store import Store
+
 import tabs
+import reducer
 
 
 AUDIO_FILE = sys.argv[1]
@@ -17,6 +22,8 @@ class Game:
         pyxel.init(160, 120, fps=60)
 
         pyxel.image(0).load(0, 0, 'assets/frets.png')
+
+        self.store = Store(reducer.initial_state(), reducer.reducer)
 
         self.tabs = tabs.load_tabs(AUDIO_FILE)
 
