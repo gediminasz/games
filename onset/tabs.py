@@ -8,12 +8,12 @@ TABS_DIR = 'tabs'
 
 
 def fret(strength):
-    for i, value in enumerate(FRETS):
-        if strength <= value:
+    for i, threshold in enumerate(FRETS):
+        if strength <= threshold:
             return i
 
 
-class TabsBuilder:
+class TabBuilder:
     def __init__(self, source_file):
         audio_data, sampling_rate = librosa.load(source_file)
         harmonic = librosa.effects.harmonic(audio_data)
@@ -29,19 +29,19 @@ class TabsBuilder:
             yield dict(time=time, strength=strength)
 
 
-def load_tabs(source_file):
+def load_tab(source_file):
     base_name = os.path.basename(source_file)
-    tabs_file_path = os.path.join(TABS_DIR, f'{base_name}.json')
+    tab_file_path = os.path.join(TABS_DIR, f'{base_name}.json')
 
-    if os.path.exists(tabs_file_path):
-        with open(tabs_file_path) as f:
+    if os.path.exists(tab_file_path):
+        with open(tab_file_path) as f:
             return json.load(f)
 
     else:
         if not os.path.exists(TABS_DIR):
             os.mkdir(TABS_DIR)
 
-        tabs = list(TabsBuilder(source_file).generate_tabs())
-        with open(tabs_file_path, 'w') as f:
-            json.dump(tabs, f)
-        return tabs
+        tab = list(TabBuilder(source_file).generate_tabs())
+        with open(tab_file_path, 'w') as f:
+            json.dump(tab, f)
+        return tab

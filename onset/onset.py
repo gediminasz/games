@@ -36,10 +36,9 @@ class Game:
 
         self.store = Store(reducer.initial_state(), reducer.reducer)
 
-        self.tabs = tabs.load_tabs(AUDIO_FILE)
+        self.tab = tabs.load_tab(AUDIO_FILE)
 
         self.next_tab = 0
-        self.fret = None
 
     def run(self):
         pyxel.run(self.update, self.draw)
@@ -48,11 +47,6 @@ class Game:
         if not self.store.state['playing']:
             self.store.dispatch(actions.START_GAME, time=time())
             # playsound(AUDIO_FILE, block=False)
-
-        else:
-            if self.time > self.tabs[self.next_tab]['time']:
-                self.fret = tabs.fret(self.tabs[self.next_tab]['strength'])
-                self.next_tab = min(self.next_tab + 1, len(self.tabs) - 1)
 
         if any(map(pyxel.btnp, self.fret_keys)) or any(map(pyxel.btnr, self.fret_keys)):
             self.store.dispatch(
@@ -72,31 +66,22 @@ class Game:
         for fret, active in enumerate(self.store.state['active_frets']):
             self.draw_fret(fret, ASSETS_FRET_ACTIVE if active else ASSETS_FRET_INACTIVE)
 
-        self.draw_incoming_tabs()
+        self.draw_upcoming_notes()
 
-    def draw_fret(self, i, state):
+    def draw_fret(self, i, asset):
         _, y = FRETS_POSITION
-        self.draw_tab(i, y, state)
+        self.draw_note(i, y, asset)
 
-    def draw_incoming_tabs(self):
-        incoming_tabs = [
-            tab for tab in self.tabs[self.next_tab:]
-            if tab['time'] < self.time + DRAW_SECONDS_AHEAD
-        ]
-
+    def draw_upcoming_notes(self):
         _, y = FRETS_POSITION
-        for tab in incoming_tabs:
-            i = tabs.fret(tab['strength'])
-            self.draw_tab(i, y - int((tab['time'] - self.time) * SPEED), ASSETS_NOTE)
+        for note in self.upcoming_notes:
+            i = tabs.fret(note['strength'])
+            self.draw_note(i, y - int((note['time'] - self.time) * SPEED), ASSETS_NOTE)
 
-    def draw_tab(self, i, y, state):
+    def draw_note(self, i, y, asset):
         x, _ = FRETS_POSITION
         width, height = FRET_SIZE
-        pyxel.blt(x + i * width, y, 0, i * width, state * height, width, height, 0)
-
-    @property
-    def time(self):
-        return time() - self.store.state['start_time']
+        pyxel.blt(x + i * width, y, 0, i * width, asset * height, width, height, 0)
 
     @property
     def fret_keys(self):
@@ -104,10 +89,26 @@ class Game:
 
     @property
     def note_hit(self):
+        next_note = next(self.upcoming_notes, None)
+        if not next_note:
+            return False
+
+        fret = tabs.fret(next_note['strength'])
         return (
-            (self.tabs[self.next_tab]['time'] - self.time < NOTE_WINDOW) and
-            self.store.state['active_frets'][self.fret]
+            ((next_note['time'] - self.time) < NOTE_WINDOW) and
+            self.store.state['active_frets'][fret]
         )
+
+    @property
+    def upcoming_notes(self):  # TODO stop calling this so often, optimize
+        return (
+            note for note in self.tab
+            if self.time < note['time'] < (self.time + DRAW_SECONDS_AHEAD)
+        )
+
+    @property
+    def time(self):
+        return time() - self.store.state['start_time']
 
 
 if __name__ == '__main__':
