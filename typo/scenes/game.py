@@ -2,30 +2,32 @@ import time
 
 import pyxel
 
+from common.scene import Scene
+
 from words import next_word
 import actions
 import constants
 
 
-class GameScene:
-    def update(self, state, dispatch):
-        word_complete = state['position'] == len(state['current_word'])
+class GameScene(Scene):
+    def update(self):
+        word_complete = self.store.state['position'] == len(self.store.state['current_word'])
         if word_complete:
-            state = dispatch(actions.COMPLETE_WORD)
+            state = self.store.dispatch(actions.COMPLETE_WORD)
 
-            if len(state['words_typed']) == constants.WORD_COUNT:
-                dispatch(actions.END_GAME, time=time.time())
+            if len(self.store.state['words_typed']) == constants.WORD_COUNT:
+                self.store.dispatch(actions.END_GAME, time=time.time())
             else:
-                dispatch(actions.NEXT_WORD, word=next_word())
+                self.store.dispatch(actions.NEXT_WORD, word=next_word())
 
         else:
-            current_character = state['current_word'][state['position']]
+            current_character = self.store.state['current_word'][self.store.state['position']]
             if self.input_character:
-                dispatch(actions.TYPE_CHARACTER)
+                self.store.dispatch(actions.TYPE_CHARACTER)
                 if self.input_character == current_character:
-                    dispatch(actions.HIT_CHARACTER)
+                    self.store.dispatch(actions.HIT_CHARACTER)
                 else:
-                    dispatch(actions.MISS_CHARACTER)
+                    self.store.dispatch(actions.MISS_CHARACTER)
 
     @property
     def input_character(self):
@@ -33,11 +35,11 @@ class GameScene:
             if pyxel.btnp(key):
                 return character
 
-    def draw(self, state):
-        current_word = state['current_word'].upper()
+    def draw(self):
+        current_word = self.store.state['current_word'].upper()
         pyxel.text(10, 60, current_word, 7)
-        pyxel.text(10, 60, current_word[:state['position']], 5)
-        pyxel.text(10, 10, f"{state['points']} (x{state['multiplier']})", 8)
+        pyxel.text(10, 60, current_word[:self.store.state['position']], 5)
+        pyxel.text(10, 10, f"{self.store.state['points']} (x{self.store.state['multiplier']})", 8)
 
     @property
     def character_map(self):

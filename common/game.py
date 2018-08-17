@@ -26,18 +26,18 @@ class Game:
             self.reloader.reload()
             self.scene = self.build_scene(self.store.state['__scene__'])
 
-        self.scene.update(self.store.state, self.store.dispatch)
+        self.scene.update()
 
     def draw(self):
         pyxel.cls(0)
-        self.scene.draw(self.store.state)
+        self.scene.draw()
 
     def change_scene(self, old_state, new_state):
         if new_state['__scene__'] != old_state['__scene__']:
             self.scene = self.build_scene(new_state['__scene__'])
 
     def build_scene(self, name):
-        return self.scenes_map[name]()
+        return self.scenes_map[name](self.store)
 
     @property
     def scenes_map(self):
