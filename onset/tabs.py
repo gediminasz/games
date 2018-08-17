@@ -3,12 +3,11 @@ import os.path
 
 import librosa
 
-FRETS = [0.2, 0.4, 0.6, 0.8, 1]
-TABS_DIR = 'tabs'
+import constants
 
 
 def fret(strength):
-    for i, threshold in enumerate(FRETS):
+    for i, threshold in enumerate(constants.FRETS):
         if strength <= threshold:
             return i
 
@@ -31,15 +30,15 @@ class TabBuilder:
 
 def load_tab(source_file):
     base_name = os.path.basename(source_file)
-    tab_file_path = os.path.join(TABS_DIR, f'{base_name}.json')
+    tab_file_path = os.path.join(constants.TABS_DIR, f'{base_name}.json')
 
     if os.path.exists(tab_file_path):
         with open(tab_file_path) as f:
             return json.load(f)
 
     else:
-        if not os.path.exists(TABS_DIR):
-            os.mkdir(TABS_DIR)
+        if not os.path.exists(constants.TABS_DIR):
+            os.mkdir(constants.TABS_DIR)
 
         tab = list(TabBuilder(source_file).generate_tabs())
         with open(tab_file_path, 'w') as f:

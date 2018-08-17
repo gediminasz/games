@@ -46,5 +46,9 @@ class Onset(common.game.Game):
             constants.SCENE_GAMEPLAY: scenes.gameplay.GameplayScene,
         }
 
+    def update(self):
+        pygame.event.pump()
+        super().update()
+
 if __name__ == '__main__':
     Onset().run()

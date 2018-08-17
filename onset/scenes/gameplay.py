@@ -1,3 +1,4 @@
+from operator import or_
 from time import time
 
 import pygame
@@ -24,18 +25,21 @@ class GameplayScene(Scene):
             self.store.dispatch(actions.START_GAME, time=time())
             pygame.mixer.music.play()
 
-        if any(map(pyxel.btnp, self.fret_keys)) or any(map(pyxel.btnr, self.fret_keys)):
-            self.store.dispatch(
-                actions.ACTIVATE_FRETS,
-                frets=[pyxel.btn(key) for key in self.fret_keys]
-            )
+        self.activate_frets()
+        self.strum()
 
-        pygame.event.pump()
+    def activate_frets(self):
+        keyboard_frets = map(pyxel.btn, (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5))
+        joystick_frets = map(self.joystick.get_button, (1, 2, 3, 0, 4))
+        frets = [
+            keyboard | joystick
+            for keyboard, joystick in zip(keyboard_frets, joystick_frets)
+        ]
 
-        joystick_frets = [self.joystick.get_button(button) for button in [1, 2, 3, 0, 4]]
-        if joystick_frets != self.store.state['active_frets']:
-            self.store.dispatch(actions.ACTIVATE_FRETS, frets=joystick_frets)
+        if frets != self.store.state['active_frets']:
+            self.store.dispatch(actions.ACTIVATE_FRETS, frets=frets)
 
+    def strum(self):
         current_strum = self.joystick.get_hat(0)[1]
         did_strum = not self.previous_strum and current_strum
         self.previous_strum = current_strum
@@ -69,10 +73,6 @@ class GameplayScene(Scene):
     def draw_fret(self, i, asset):
         _, y = constants.FRETS_POSITION
         self.draw_note(i, y, asset)
-
-    @property
-    def fret_keys(self):
-        return (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5)
 
     def note_hit(self):
         next_note = next(self.upcoming_notes(), None)
