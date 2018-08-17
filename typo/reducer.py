@@ -4,7 +4,7 @@ import constants
 
 def initial_state():
     return {
-        'current_scene': None,
+        '__scene__': None,
 
         'start_time': None,
         'end_time': None,
@@ -24,12 +24,12 @@ def initial_state():
 
 def reducer(state, action_type, **kwargs):
     if action_type == actions.LAUNCH:
-        return {**state, 'current_scene': constants.SCENE_START}
+        return {**state, '__scene__': constants.SCENE_START}
 
     if action_type == actions.START_GAME:
         return {
             **state,
-            'current_scene': constants.SCENE_GAME,
+            '__scene__': constants.SCENE_GAME,
             'start_time': kwargs['time'],
             'current_word': kwargs['word'],
             'position': 0,
@@ -42,7 +42,7 @@ def reducer(state, action_type, **kwargs):
     if action_type == actions.END_GAME:
         return {
             **state,
-            'current_scene': constants.SCENE_START,
+            '__scene__': constants.SCENE_START,
             'end_time': kwargs['time'],
             'wpm': constants.WORD_COUNT / (kwargs['time'] - state['start_time']) * 60,
             'accuracy': sum(map(len, state['words_typed'])) / state['characters_typed']

@@ -4,6 +4,8 @@ INITIAL_ACTIVE_FRETS = (False,) * 5
 
 def initial_state():
     return {
+        '__scene__': None,
+
         'playing': False,
         'start_time': None,
         'active_frets': INITIAL_ACTIVE_FRETS,
