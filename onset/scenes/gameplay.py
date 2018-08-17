@@ -18,8 +18,6 @@ class GameplayScene(Scene):
         self.joystick = pygame.joystick.Joystick(0)
         self.joystick.init()
 
-        self.previous_strum = self.joystick.get_hat(0)[1]
-
     def update(self):
         if not self.store.state['playing']:
             self.store.dispatch(actions.START_GAME, time=time())
@@ -40,11 +38,13 @@ class GameplayScene(Scene):
             self.store.dispatch(actions.ACTIVATE_FRETS, frets=frets)
 
     def strum(self):
-        current_strum = self.joystick.get_hat(0)[1]
-        did_strum = not self.previous_strum and current_strum
-        self.previous_strum = current_strum
+        is_strumming = pyxel.btn(pyxel.KEY_SPACE) or self.joystick.get_hat(0)[1]
+        strum = not self.store.state['strum'] and is_strumming
 
-        if pyxel.btnp(pyxel.KEY_SPACE) or did_strum:
+        if is_strumming != self.store.state['strum']:
+            self.store.dispatch(actions.SET_STRUM, strum=strum)
+
+        if strum:
             if self.note_hit():
                 print('HIT')
             else:

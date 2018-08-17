@@ -10,6 +10,7 @@ def initial_state():
         'playing': False,
         'start_time': None,
         'active_frets': constants.INITIAL_ACTIVE_FRETS,
+        'strum': False,
     }
 
 
@@ -23,6 +24,7 @@ def reducer(state, action_type, **kwargs):
             'playing': True,
             'start_time': kwargs['time'],
             'active_frets': constants.INITIAL_ACTIVE_FRETS,
+            'strum': False,
         }
 
     if action_type == actions.LOAD_TAB:
@@ -30,5 +32,8 @@ def reducer(state, action_type, **kwargs):
 
     if action_type == actions.ACTIVATE_FRETS:
         return {**state, 'active_frets': kwargs['frets']}
+
+    if action_type == actions.SET_STRUM:
+        return {**state, 'strum': kwargs['strum']}
 
     return state
