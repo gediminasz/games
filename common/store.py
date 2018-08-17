@@ -1,3 +1,6 @@
+import reprlib
+
+
 class Store:
     def __init__(self, initial_state, reducer):
         self.state = initial_state
@@ -5,7 +8,7 @@ class Store:
         self.subscribers = []
 
     def dispatch(self, action_type, **kwargs):
-        print(action_type, kwargs)
+        print(action_type, reprlib.repr(kwargs))
 
         new_state = self.reducer(self.state, action_type, **kwargs)
 
