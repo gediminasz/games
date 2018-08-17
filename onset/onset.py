@@ -6,7 +6,7 @@ from time import time
 import pygame
 import pyxel
 
-from common.store import Store
+import common.game
 
 import actions
 import reducer
@@ -28,13 +28,11 @@ ASSETS_NOTE = 3
 ASSETS_NOTE_SMALL = 4
 
 
-class Game:
+class Onset(common.game.Game):
     def __init__(self):
-        pyxel.init(160, 120, fps=60)
+        super().__init__(reducer.initial_state(), reducer.reducer)
 
         pyxel.image(0).load(0, 0, 'assets/frets.png')
-
-        self.store = Store(reducer.initial_state(), reducer.reducer)
 
         self.tab = tabs.load_tab(AUDIO_FILE)
 
@@ -48,6 +46,9 @@ class Game:
 
         pygame.mixer.init()
         pygame.mixer.music.load(AUDIO_FILE)
+
+    def init_pyxel(self):
+        pyxel.init(160, 120, fps=60)
 
     def run(self):
         pyxel.run(self.update, self.draw)
@@ -131,4 +132,4 @@ class Game:
 
 
 if __name__ == '__main__':
-    Game().run()
+    Onset().run()

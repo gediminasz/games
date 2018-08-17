@@ -4,7 +4,7 @@ sys.path.append('..')
 import pyxel
 
 from common.reloader import Reloader
-from common.store import Store
+import common.game
 
 import actions
 import constants
@@ -13,11 +13,10 @@ import scenes.game
 import scenes.start
 
 
-class Game:
+class Typo(common.game.Game):
     def __init__(self):
-        pyxel.init(160, 120)
+        super().__init__(reducer.initial_state(), reducer.reducer)
 
-        self.store = Store(reducer.initial_state(), reducer.reducer)
         self.store.subscribe(self.change_scene)
 
         self.reloader = Reloader((
@@ -59,4 +58,4 @@ class Game:
 
 
 if __name__ == '__main__':
-    Game().run()
+    Typo().run()
