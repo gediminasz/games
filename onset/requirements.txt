@@ -1,5 +1,4 @@
 librosa
-playsound
 pygame
 pyxel
 

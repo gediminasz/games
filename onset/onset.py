@@ -3,7 +3,6 @@ sys.path.append('..')
 
 from time import time
 
-from playsound import playsound
 import pygame
 import pyxel
 
@@ -47,13 +46,16 @@ class Game:
         self.joystick.init()
         self.previous_strum = self.joystick.get_hat(0)[1]
 
+        pygame.mixer.init()
+        pygame.mixer.music.load(AUDIO_FILE)
+
     def run(self):
         pyxel.run(self.update, self.draw)
 
     def update(self):
         if not self.store.state['playing']:
             self.store.dispatch(actions.START_GAME, time=time())
-            # playsound(AUDIO_FILE, block=False)
+            pygame.mixer.music.play()
 
         if any(map(pyxel.btnp, self.fret_keys)) or any(map(pyxel.btnr, self.fret_keys)):
             self.store.dispatch(
