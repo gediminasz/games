@@ -34,7 +34,7 @@ class GameplayScene(Scene):
             for keyboard, joystick in zip(keyboard_frets, joystick_frets)
         ]
 
-        if frets != self.store.state['active_frets']:
+        if frets != self.store.state['frets']:
             self.store.dispatch(actions.ACTIVATE_FRETS, frets=frets)
 
     def strum(self):
@@ -51,7 +51,7 @@ class GameplayScene(Scene):
                 print('MISS')
 
     def draw(self):
-        for fret, active in enumerate(self.store.state['active_frets']):
+        for fret, active in enumerate(self.store.state['frets']):
             self.draw_fret(
                 fret,
                 constants.ASSETS_FRET_ACTIVE if active else constants.ASSETS_FRET_INACTIVE
@@ -82,7 +82,7 @@ class GameplayScene(Scene):
         fret = tabs.fret(next_note['strength'])
         return (
             ((next_note['time'] - self.time()) < constants.NOTE_WINDOW) and
-            self.store.state['active_frets'][fret]
+            self.store.state['frets'][fret]
         )
 
     def upcoming_notes(self):  # TODO stop calling this so often, optimize

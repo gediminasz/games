@@ -3,6 +3,6 @@ from dataclasses import dataclass
 from .store import Store
 
 
-@dataclass
+@dataclass(frozen=True)
 class Scene:
     store: Store
