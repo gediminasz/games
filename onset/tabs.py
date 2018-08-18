@@ -15,9 +15,8 @@ def fret(strength):
 class TabBuilder:
     def __init__(self, source_file):
         audio_data, sampling_rate = librosa.load(source_file)
-        harmonic = librosa.effects.harmonic(audio_data)
 
-        self.onset_envelope = librosa.onset.onset_strength(harmonic, sampling_rate)
+        self.onset_envelope = librosa.onset.onset_strength(audio_data, sampling_rate)
         onsets = librosa.onset.onset_detect(onset_envelope=self.onset_envelope)
         self.onset_times = librosa.frames_to_time(onsets, sr=sampling_rate)
 
@@ -48,7 +47,18 @@ def load_file(source_file):
 
 def load_notes(source_file):
     notes = load_file(source_file)
-    return [
-        {**note, 'hit': False, 'index': index}
-        for index, note in enumerate(notes)
-    ]
+    result = [annotate(notes[0])]
+
+    for index, note in enumerate(notes[1:]):
+        if not within_time_window(note, result[-1]['time']):
+            result.append(annotate(note, index))
+
+    return result
+
+
+def annotate(note, index=0):
+    return {**note, 'hit': False, 'index': index}
+
+
+def within_time_window(note, time, window=constants.NOTE_WINDOW):
+    return abs(note['time'] - time) < window

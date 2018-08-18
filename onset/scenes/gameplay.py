@@ -59,7 +59,7 @@ class GameplayScene(Scene):
         chord = tuple(i == fret for i in range(len(constants.FRETS)))
 
         return (
-            (abs(note['time'] - self.time()) < constants.NOTE_WINDOW) and
+            tabs.within_time_window(note, self.time) and
             self.store.state['frets'] == chord
         )
 
@@ -78,7 +78,7 @@ class GameplayScene(Scene):
         _, y = constants.FRETS_POSITION
         for note in self.upcoming_notes:
             i = tabs.fret(note['strength'])
-            self.draw_note(i, y - int((note['time'] - self.time()) * constants.SPEED), constants.ASSETS_NOTE)
+            self.draw_note(i, y - int((note['time'] - self.time) * constants.SPEED), constants.ASSETS_NOTE)
 
     def draw_note(self, i, y, asset):
         x, _ = constants.FRETS_POSITION
@@ -91,12 +91,13 @@ class GameplayScene(Scene):
 
     @property
     def upcoming_notes(self):  # TODO stop calling this so often, optimize
-        current_time = self.time()
+        current_time = self.time
         return (
             note for note in self.store.state['notes']
             if (current_time < note['time'] < (current_time + constants.DRAW_SECONDS_AHEAD))
             and not note['hit']
         )
 
+    @property
     def time(self):
         return time() - self.store.state['start_time']
