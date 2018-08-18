@@ -34,7 +34,7 @@ class Onset(common.game.Game):
         pygame.mixer.init()
         pygame.mixer.music.load(AUDIO_FILE)
 
-        self.store.dispatch(actions.LOAD_TAB, tab=tabs.load_tab(AUDIO_FILE))
+        self.store.dispatch(actions.LOAD_TAB, notes=tabs.load_notes(AUDIO_FILE))
         self.store.dispatch(actions.LAUNCH)
 
     def init_pyxel(self):

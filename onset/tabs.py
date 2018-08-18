@@ -28,7 +28,7 @@ class TabBuilder:
             yield dict(time=time, strength=strength)
 
 
-def load_tab(source_file):
+def load_file(source_file):
     base_name = os.path.basename(source_file)
     tab_file_path = os.path.join(constants.TABS_DIR, f'{base_name}.json')
 
@@ -44,3 +44,11 @@ def load_tab(source_file):
         with open(tab_file_path, 'w') as f:
             json.dump(tab, f)
         return tab
+
+
+def load_notes(source_file):
+    notes = load_file(source_file)
+    return [
+        {**note, 'hit': False, 'index': index}
+        for index, note in enumerate(notes)
+    ]

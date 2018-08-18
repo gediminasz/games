@@ -6,7 +6,7 @@ def initial_state():
     return {
         '__scene__': None,
 
-        'tab': None,
+        'notes': None,
         'playing': False,
         'start_time': None,
         'frets': constants.INITIAL_ACTIVE_FRETS,
@@ -28,12 +28,20 @@ def reducer(state, action_type, **kwargs):
         }
 
     if action_type == actions.LOAD_TAB:
-        return {**state, 'tab': kwargs['tab']}
+        return {**state, 'notes': kwargs['notes']}
 
     if action_type == actions.ACTIVATE_FRETS:
         return {**state, 'frets': kwargs['frets']}
 
     if action_type == actions.SET_STRUM:
         return {**state, 'strum': kwargs['strum']}
+
+    if action_type == actions.NOTE_HIT:
+        index = kwargs['note']['index']
+        notes = [
+            {**note, 'hit': True if note['index'] == index else note['hit']}
+            for note in state['notes']
+        ]
+        return {**state, 'notes': notes}
 
     return state

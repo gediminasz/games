@@ -29,10 +29,10 @@ class GameplayScene(Scene):
     def activate_frets(self):
         keyboard_frets = map(pyxel.btn, (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5))
         joystick_frets = map(self.joystick.get_button, (1, 2, 3, 0, 4))
-        frets = [
-            keyboard | joystick
+        frets = tuple(
+            bool(keyboard | joystick)
             for keyboard, joystick in zip(keyboard_frets, joystick_frets)
-        ]
+        )
 
         if frets != self.store.state['frets']:
             self.store.dispatch(actions.ACTIVATE_FRETS, frets=frets)
@@ -44,11 +44,21 @@ class GameplayScene(Scene):
         if is_strumming != self.store.state['strum']:
             self.store.dispatch(actions.SET_STRUM, strum=strum)
 
-        if strum:
-            if self.note_hit():
-                print('HIT')
-            else:
-                print('MISS')
+        note = next(self.upcoming_notes, None)
+        if strum and not note['hit'] and self.note_hit(note):
+            self.store.dispatch(actions.NOTE_HIT, note=note)
+
+    def note_hit(self, note):
+        if not note:
+            return False
+
+        fret = tabs.fret(note['strength'])
+        chord = tuple(i == fret for i in range(len(constants.FRETS)))
+
+        return (
+            (abs(note['time'] - self.time()) < constants.NOTE_WINDOW) and
+            self.store.state['frets'] == chord
+        )
 
     def draw(self):
         for fret, active in enumerate(self.store.state['frets']):
@@ -61,7 +71,7 @@ class GameplayScene(Scene):
 
     def draw_upcoming_notes(self):
         _, y = constants.FRETS_POSITION
-        for note in self.upcoming_notes():
+        for note in self.upcoming_notes:
             i = tabs.fret(note['strength'])
             self.draw_note(i, y - int((note['time'] - self.time()) * constants.SPEED), constants.ASSETS_NOTE)
 
@@ -74,22 +84,13 @@ class GameplayScene(Scene):
         _, y = constants.FRETS_POSITION
         self.draw_note(i, y, asset)
 
-    def note_hit(self):
-        next_note = next(self.upcoming_notes(), None)
-        if not next_note:
-            return False
-
-        fret = tabs.fret(next_note['strength'])
-        return (
-            ((next_note['time'] - self.time()) < constants.NOTE_WINDOW) and
-            self.store.state['frets'][fret]
-        )
-
+    @property
     def upcoming_notes(self):  # TODO stop calling this so often, optimize
         current_time = self.time()
         return (
-            note for note in self.store.state['tab']
-            if current_time < note['time'] < (current_time + constants.DRAW_SECONDS_AHEAD)
+            note for note in self.store.state['notes']
+            if (current_time < note['time'] < (current_time + constants.DRAW_SECONDS_AHEAD))
+            and not note['hit']
         )
 
     def time(self):
