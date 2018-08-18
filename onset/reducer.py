@@ -11,6 +11,7 @@ def initial_state():
         'start_time': None,
         'frets': constants.INITIAL_ACTIVE_FRETS,
         'strum': False,
+        'streak': 0,
     }
 
 
@@ -25,6 +26,7 @@ def reducer(state, action_type, **kwargs):
             'start_time': kwargs['time'],
             'frets': constants.INITIAL_ACTIVE_FRETS,
             'strum': False,
+            'streak': 0,
         }
 
     if action_type == actions.LOAD_TAB:
@@ -42,6 +44,9 @@ def reducer(state, action_type, **kwargs):
             {**note, 'hit': True if note['index'] == index else note['hit']}
             for note in state['notes']
         ]
-        return {**state, 'notes': notes}
+        return {**state, 'notes': notes, 'streak': state['streak'] + 1}
+
+    if action_type == actions.NOTE_MISS:
+        return {**state, 'streak': 0}
 
     return state

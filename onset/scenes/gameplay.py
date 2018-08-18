@@ -45,8 +45,11 @@ class GameplayScene(Scene):
             self.store.dispatch(actions.SET_STRUM, strum=strum)
 
         note = next(self.upcoming_notes, None)
-        if strum and not note['hit'] and self.note_hit(note):
-            self.store.dispatch(actions.NOTE_HIT, note=note)
+        if strum:
+            if not note['hit'] and self.note_hit(note):
+                self.store.dispatch(actions.NOTE_HIT, note=note)
+            else:
+                self.store.dispatch(actions.NOTE_MISS)
 
     def note_hit(self, note):
         if not note:
@@ -68,6 +71,8 @@ class GameplayScene(Scene):
             )
 
         self.draw_upcoming_notes()
+
+        pyxel.text(2, 2, f"Streak: {self.store.state['streak']}", 7)
 
     def draw_upcoming_notes(self):
         _, y = constants.FRETS_POSITION
