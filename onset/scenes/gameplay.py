@@ -46,7 +46,7 @@ class GameplayScene(Scene):
 
         note = next(self.upcoming_notes, None)
         if strum:
-            if not note['hit'] and self.note_hit(note):
+            if note and not note['hit'] and self.note_hit(note):
                 self.store.dispatch(actions.NOTE_HIT, note=note)
             else:
                 self.store.dispatch(actions.NOTE_MISS)
