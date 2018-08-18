@@ -6,7 +6,7 @@ A typing game.
 
 # Onset
 
-Guitar Hero clone, but you can play any song, similarly to Audiosurf.
+Guitar Hero clone, but you can play any song, similarly to Audiosurf. Supports Rock Band 4 controller.
 
 ![onset](gifs/onset.gif)
 
