@@ -12,4 +12,6 @@ Guitar Hero clone, but you can play any song, similarly to Audiosurf. Supports R
 
 # Other notes
 
+Generic stuff: https://github.com/gediminasz/pyxel-extensions
+
 `F1` triggers hot reloading.
