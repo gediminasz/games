@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyxel = "*"
+pyxel-extensions = {editable = true, ref = "v0.0.1", git = "https://github.com/gediminasz/pyxel-extensions.git"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"

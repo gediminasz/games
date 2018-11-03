@@ -1,7 +1,7 @@
 import sys
 sys.path.append('..')
 
-import common.game
+import pyxel_extensions.game
 
 import actions
 import constants
@@ -10,7 +10,7 @@ import scenes.game
 import scenes.start
 
 
-class Typo(common.game.Game):
+class Typo(pyxel_extensions.game.Game):
     def __init__(self):
         super().__init__(
             reducer.initial_state(),

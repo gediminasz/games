@@ -1,7 +1,7 @@
 import time
 import pyxel
 
-from common.scene import Scene
+from pyxel_extensions.scene import Scene
 
 from words import next_word
 import actions
