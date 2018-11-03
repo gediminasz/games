@@ -4,7 +4,7 @@ from time import time
 import pygame
 import pyxel
 
-from common.scene import Scene
+from pyxel_extensions.scene import Scene
 
 import actions
 import constants

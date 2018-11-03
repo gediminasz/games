@@ -4,7 +4,7 @@ sys.path.append('..')
 import pygame
 import pyxel
 
-import common.game
+import pyxel_extensions.game
 
 import actions
 import constants
@@ -16,7 +16,7 @@ import scenes.gameplay
 AUDIO_FILE = sys.argv[1]
 
 
-class Onset(common.game.Game):
+class Onset(pyxel_extensions.game.Game):
     def __init__(self):
         super().__init__(
             reducer.initial_state(),
