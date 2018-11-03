@@ -1,4 +1,3 @@
-from operator import or_
 from time import time
 
 import pygame
@@ -6,6 +5,7 @@ import pyxel
 
 from pyxel_extensions.scene import Scene
 
+from joystick import Joystick
 import actions
 import constants
 import tabs
@@ -14,9 +14,7 @@ import tabs
 class GameplayScene(Scene):
     def __init__(self, scene):
         super().__init__(scene)
-
-        self.joystick = pygame.joystick.Joystick(0)
-        self.joystick.init()
+        self.joystick = Joystick()
 
     def update(self):
         if not self.store.state['playing']:
@@ -27,18 +25,20 @@ class GameplayScene(Scene):
         self.strum()
 
     def activate_frets(self):
-        keyboard_frets = map(pyxel.btn, (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5))
-        joystick_frets = map(self.joystick.get_button, (1, 2, 3, 0, 4))
         frets = tuple(
             bool(keyboard | joystick)
-            for keyboard, joystick in zip(keyboard_frets, joystick_frets)
+            for keyboard, joystick in zip(self.keyboard_frets, self.joystick.frets)
         )
 
         if frets != self.store.state['frets']:
             self.store.dispatch(actions.ACTIVATE_FRETS, frets=frets)
 
+    @property
+    def keyboard_frets(self):
+        return map(pyxel.btn, (pyxel.KEY_1, pyxel.KEY_2, pyxel.KEY_3, pyxel.KEY_4, pyxel.KEY_5))
+
     def strum(self):
-        is_strumming = pyxel.btn(pyxel.KEY_SPACE) or self.joystick.get_hat(0)[1]
+        is_strumming = pyxel.btn(pyxel.KEY_SPACE) or self.joystick.is_strumming
         strum = not self.store.state['strum'] and is_strumming
 
         if is_strumming != self.store.state['strum']:
