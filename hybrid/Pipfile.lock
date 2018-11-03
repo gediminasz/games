@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f4e87d029a78c3799ceff70f96a2e8ccf14af63893c11f66394ae5b4dcb780a9"
+            "sha256": "cf7d44936fc32a3df8fa48beb1c999873109cd8ea46aac1fba101cfc48bf6626"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -149,11 +149,6 @@
             ],
             "index": "pypi",
             "version": "==0.8.9"
-        },
-        "pyxel-extensions": {
-            "editable": true,
-            "git": "https://github.com/gediminasz/pyxel-extensions.git",
-            "ref": "c210780f68b4b446f064f1067addbf594a4b2f5d"
         },
         "sounddevice": {
             "hashes": [

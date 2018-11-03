@@ -1,15 +1,11 @@
-import actions
-import constants
+from scenes.start import StartScene
 
 
 def initial_state():
     return {
-        '__scene__': None,
+        '__scene__': StartScene.name,
     }
 
 
 def reducer(state, action_type, **kwargs):
-    if action_type == actions.LAUNCH:
-        return {**state, '__scene__': constants.SCENE_START}
-
     return state
