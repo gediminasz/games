@@ -41,6 +41,5 @@ class GameplayScene(Scene):
 
     @property
     def output(self):
-        assert len(self.top_sequence) == len(self.bottom_sequence)
         cut_index = len(self.top_sequence) // 2
         return self.bottom_sequence[:cut_index] + self.top_sequence[cut_index:]
