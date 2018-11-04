@@ -4,14 +4,22 @@ import scenes.start
 import scenes.gameplay
 
 
-if __name__ == '__main__':
-    Game(
-        initial_state={},
-        scenes=(
+class Hybrid(Game):
+    def get_scenes(self):
+        return (
             scenes.start.StartScene,
             scenes.gameplay.GameplayScene,
-        ),
+        )
+
+
+if __name__ == '__main__':
+    Hybrid(
+        initial_state={
+            'puzzle': None,
+        },
+
         initial_scene=scenes.start.StartScene,
+
         hot_modules=(
             scenes.start,
             scenes.gameplay,
