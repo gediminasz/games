@@ -3,7 +3,7 @@ from pyxel_extensions import action
 
 @action
 def load_puzzle(state, puzzle):
-    assert len(puzzle['top']) == len(puzzle['bottom']) == len(puzzle['goal'])
+    assert (puzzle is None) or (len(puzzle['top']) == len(puzzle['bottom']) == len(puzzle['goal']))
     return {**state, 'puzzle': puzzle}
 
 
