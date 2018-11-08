@@ -3,12 +3,12 @@ import pyxel
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
-from .start import StartScene
 
 
 class ScoreScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_SPACE):
+            from .start import StartScene
             self.store.dispatch(change_scene(StartScene))
 
     def draw(self):
