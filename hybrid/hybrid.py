@@ -1,3 +1,4 @@
+import pyxel
 from pyxel_extensions.game import Game
 
 import scenes.gameplay
@@ -6,6 +7,10 @@ import scenes.start
 
 
 class Hybrid(Game):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        pyxel.load('assets/graphics.pyxel')
+
     def get_scenes(self):
         return (
             scenes.gameplay.GameplayScene,
