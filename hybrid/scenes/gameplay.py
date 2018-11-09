@@ -7,6 +7,12 @@ from actions import clear_puzzle, shift_left, shift_right, crossover
 from .score import ScoreScene
 
 
+NUCLEOBASE_WIDTH = 8
+NUCLEOBASE_HEIGHT = NUCLEOBASE_WIDTH
+NUCLEOBASE_PADDING = 1
+NUCLEOBASE_ORDER = 'ACGT'
+
+
 class GameplayScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
@@ -27,24 +33,9 @@ class GameplayScene(Scene):
     def draw(self):
         pyxel.text(10, 10, f'Goal: {self.goal}', 7)
 
-        self.draw_sequence(self.top_sequence, 10, 40)
-        self.draw_sequence(self.bottom_sequence, 10, 50)
-        self.draw_output(10, 65)
-
-    def draw_sequence(self, sequence, x, y):
-        for i, nucleobase in enumerate(sequence):
-            self.draw_nucleobase(nucleobase, x + i * 9, y)
-
-    def draw_output(self, x, y):
-        for i, nucleobase in enumerate(self.output):
-            match = nucleobase == self.goal[i]
-            self.draw_nucleobase(nucleobase, x + i * 9, y, match)
-
-    def draw_nucleobase(self, nucleobase, x, y, match=False):
-        nucleobase_indexes = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
-        offset = nucleobase_indexes[nucleobase] * 8
-        vertical_offset = 8 if match else 0
-        pyxel.blt(x, y, 0, offset, vertical_offset, 8, 8)
+        draw_sequence(self.top_sequence, 10, 40)
+        draw_sequence(self.bottom_sequence, 10, 50)
+        draw_output(self.output, self.goal, 10, 65)
 
     @property
     def top_sequence(self):
@@ -62,3 +53,23 @@ class GameplayScene(Scene):
     def output(self):
         cut_index = len(self.top_sequence) // 2
         return self.bottom_sequence[:cut_index] + self.top_sequence[cut_index:]
+
+
+def draw_sequence(sequence, x, y):
+    for i, nucleobase in enumerate(sequence):
+        offset = i * (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING)
+        draw_nucleobase(nucleobase, x + offset, y)
+
+
+def draw_output(sequence, goal, x, y):
+    for i, nucleobase in enumerate(sequence):
+        offset = i * (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING)
+        match = nucleobase == goal[i]
+        draw_nucleobase(nucleobase, x + offset, y, match)
+
+
+def draw_nucleobase(nucleobase, x, y, match=False):
+    index = NUCLEOBASE_ORDER.index(nucleobase)
+    source_x = index * NUCLEOBASE_WIDTH
+    source_y = NUCLEOBASE_HEIGHT if match else 0
+    pyxel.blt(x, y, 0, source_x, source_y, NUCLEOBASE_WIDTH, NUCLEOBASE_HEIGHT)
