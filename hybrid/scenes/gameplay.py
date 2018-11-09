@@ -66,6 +66,7 @@ class GameplayScene(Scene):
     def crossover_point(self):
         return self.store.state['puzzle']['crossover_point']
 
+
 def draw_sequence(sequence, x, y):
     for i, nucleobase in enumerate(sequence):
         offset = i * (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING)
