@@ -46,3 +46,15 @@ def crossover(state):
             'bottom': state['puzzle']['bottom'][:l] + state['puzzle']['top'][l:]
         }
     }
+
+
+@action
+def flip(state):
+    return {
+        **state,
+        'puzzle': {
+            **state['puzzle'],
+            'top': state['puzzle']['bottom'],
+            'bottom': state['puzzle']['top']
+        }
+    }

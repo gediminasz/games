@@ -3,7 +3,7 @@ import pyxel
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
-from actions import clear_puzzle, shift_left, shift_right, crossover
+from actions import clear_puzzle, shift_left, shift_right, crossover, flip
 from .score import ScoreScene
 
 
@@ -26,6 +26,8 @@ class GameplayScene(Scene):
             self.store.dispatch(shift_right())
         elif pyxel.btnp(pyxel.KEY_SPACE):
             self.store.dispatch(crossover())
+        elif pyxel.btnp(pyxel.KEY_TAB):
+            self.store.dispatch(flip())
 
         if self.goal in (self.top_sequence, self.bottom_sequence):
             self.store.dispatch(change_scene(ScoreScene))
