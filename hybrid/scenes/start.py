@@ -13,7 +13,8 @@ class StartScene(Scene):
             puzzle = {
                 'top': 'CCAA',
                 'bottom': 'TTAA',
-                'goal': 'AAAA'
+                'goal': 'AAAA',
+                'crossover_point': 2
             }
             self.store.dispatch(load_puzzle(puzzle))
             self.store.dispatch(change_scene(GameplayScene))
