@@ -10,6 +10,16 @@ Guitar Hero clone, but you can play any song, similarly to Audiosurf. Supports R
 
 ![onset](gifs/onset.gif)
 
+# Hybrid
+
+A game about splicing DNA. Made during Github's 2018 Game Off game jam, of which the theme was "hybrid".
+
+## Controls
+
+* `left`/`right` - rotate bottom DNA
+* `space` - crossover DNAs
+* `tab` - flip DNAs
+
 # Other notes
 
 Generic stuff: https://github.com/gediminasz/pyxel-extensions
