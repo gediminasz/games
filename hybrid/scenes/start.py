@@ -10,12 +10,7 @@ from .gameplay import GameplayScene
 class StartScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_SPACE):
-            puzzle = {
-                'top': 'CCAA',
-                'bottom': 'TTAA',
-                'goal': 'AAAA',
-                'crossover': 2
-            }
+            puzzle = self.store.state['puzzles'][0]
             self.store.dispatch(load_puzzle(puzzle))
             self.store.dispatch(change_scene(GameplayScene))
 

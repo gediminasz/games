@@ -1,0 +1,10 @@
+{
+    "puzzles": [
+        {
+            "top": "CCAA",
+            "bottom": "TTAA",
+            "goal": "AAAA",
+            "crossover": 2
+        }
+    ]
+}

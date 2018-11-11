@@ -2,6 +2,11 @@ from pyxel_extensions import action
 
 
 @action
+def load_puzzles(state, puzzles):
+    return {**state, 'puzzles': puzzles}
+
+
+@action
 def load_puzzle(state, puzzle):
     assert (puzzle is None) or (len(puzzle['top']) == len(puzzle['bottom']) == len(puzzle['goal']))
     return {**state, 'puzzle': puzzle}
