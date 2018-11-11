@@ -5,6 +5,12 @@
             "bottom": "TTAA",
             "goal": "AAAA",
             "crossover": 2
+        },
+        {
+            "top": "CCAA",
+            "bottom": "TTAA",
+            "goal": "CTCT",
+            "crossover": 2
         }
     ]
 }

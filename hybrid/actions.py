@@ -7,6 +7,17 @@ def load_puzzles(state, puzzles):
 
 
 @action
+def select_puzzle(state, index):
+    return {
+        **state,
+        'puzzle_select': {
+            **state['puzzle_select'],
+            'selected_puzzle': index
+        }
+    }
+
+
+@action
 def load_puzzle(state, puzzle):
     assert (puzzle is None) or (len(puzzle['top']) == len(puzzle['bottom']) == len(puzzle['goal']))
     return {**state, 'puzzle': puzzle}

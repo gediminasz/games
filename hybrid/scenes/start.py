@@ -3,16 +3,12 @@ import pyxel
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
-from actions import load_puzzle
-from .gameplay import GameplayScene
-
 
 class StartScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_SPACE):
-            puzzle = self.store.state['puzzles'][0]
-            self.store.dispatch(load_puzzle(puzzle))
-            self.store.dispatch(change_scene(GameplayScene))
+            from .puzzle_select import PuzzleSelectScene
+            self.store.dispatch(change_scene(PuzzleSelectScene))
 
     def draw(self):
         pyxel.text(56, 40, 'H Y B R I D', 4)

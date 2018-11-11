@@ -8,8 +8,8 @@ from pyxel_extensions.actions import change_scene
 class ScoreScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_SPACE):
-            from .start import StartScene
-            self.store.dispatch(change_scene(StartScene))
+            from .puzzle_select import PuzzleSelectScene
+            self.store.dispatch(change_scene(PuzzleSelectScene))
 
     def draw(self):
         pyxel.text(65, 40, 'Success!', 11)

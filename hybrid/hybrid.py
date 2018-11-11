@@ -1,12 +1,13 @@
 import json
 
-import pyxel
 from pyxel_extensions.game import Game
+import pyxel
 
+from actions import load_puzzles
 import scenes.gameplay
+import scenes.puzzle_select
 import scenes.score
 import scenes.start
-from actions import load_puzzles
 
 
 class Hybrid(Game):
@@ -18,6 +19,7 @@ class Hybrid(Game):
     def get_scenes(self):
         return (
             scenes.gameplay.GameplayScene,
+            scenes.puzzle_select.PuzzleSelectScene,
             scenes.score.ScoreScene,
             scenes.start.StartScene,
         )
@@ -33,12 +35,16 @@ if __name__ == '__main__':
         initial_state={
             'puzzles': None,
             'puzzle': None,
+            'puzzle_select': {
+                'selected_puzzle': 0
+            }
         },
 
         initial_scene=scenes.start.StartScene,
 
         hot_modules=(
             scenes.gameplay,
+            scenes.puzzle_select,
             scenes.score,
             scenes.start,
         )
