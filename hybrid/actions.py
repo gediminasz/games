@@ -37,7 +37,7 @@ def shift_right(state):
 
 @action
 def crossover(state):
-    crossover_point = state['puzzle']['crossover_point']
+    crossover = state['puzzle']['crossover']
     top = state['puzzle']['top']
     bottom = state['puzzle']['bottom']
 
@@ -45,8 +45,8 @@ def crossover(state):
         **state,
         'puzzle': {
             **state['puzzle'],
-            'top': top[:crossover_point] + bottom[crossover_point:],
-            'bottom': bottom[:crossover_point] + top[crossover_point:],
+            'top': top[:crossover] + bottom[crossover:],
+            'bottom': bottom[:crossover] + top[crossover:],
         }
     }
 

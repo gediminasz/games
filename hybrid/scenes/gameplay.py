@@ -40,7 +40,7 @@ class GameplayScene(Scene):
         pyxel.cls(1)
         pyxel.text(PADDING, PADDING, f'Goal: {self.goal}', 7)
 
-        draw_crossover_highlight(self.crossover_point, len(self.top_sequence))
+        draw_crossover_highlight(self.crossover, len(self.top_sequence))
 
         draw_sequence(self.top_sequence, PADDING, TOP_Y)
         draw_sequence(self.bottom_sequence, PADDING, BOTTOM_Y)
@@ -60,11 +60,11 @@ class GameplayScene(Scene):
 
     @property
     def output(self):
-        return self.bottom_sequence[:self.crossover_point] + self.top_sequence[self.crossover_point:]
+        return self.bottom_sequence[:self.crossover] + self.top_sequence[self.crossover:]
 
     @property
-    def crossover_point(self):
-        return self.store.state['puzzle']['crossover_point']
+    def crossover(self):
+        return self.store.state['puzzle']['crossover']
 
 
 def draw_sequence(sequence, x, y):
@@ -87,9 +87,9 @@ def draw_nucleobase(nucleobase, x, y, match=False):
     pyxel.blt(x, y, 0, source_x, source_y, NUCLEOBASE_WIDTH, NUCLEOBASE_HEIGHT, 0)
 
 
-def draw_crossover_highlight(crossover_point, sequence_length):
+def draw_crossover_highlight(crossover, sequence_length):
     pyxel.rect(
-        PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * crossover_point - 1,
+        PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * crossover - 1,
         TOP_Y - 2,
         PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * sequence_length - 1,
         OUTPUT_Y + NUCLEOBASE_HEIGHT + 1,
