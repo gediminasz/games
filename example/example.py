@@ -5,9 +5,9 @@ from pyxel_extensions.game import Game
 from pyxel_extensions.scene import Scene
 
 
-@action
-def increment_counter(state):
-    return {**state, 'counter': state['counter'] + 1}
+class Example(Game):
+    def get_scenes(self):
+        return (ExampleScene,)
 
 
 class ExampleScene(Scene):
@@ -16,12 +16,13 @@ class ExampleScene(Scene):
             self.store.dispatch(increment_counter())
 
     def draw(self):
-        pyxel.text(10, 10, str(self.store.state['counter']), 7)
+        pyxel.text(10, 10, 'Press <space> to increment:', 7)
+        pyxel.text(10, 20, str(self.store.state['counter']), 7)
 
 
-class Example(Game):
-    def get_scenes(self):
-        return (ExampleScene,)
+@action
+def increment_counter(state):
+    return {**state, 'counter': state['counter'] + 1}
 
 
 if __name__ == '__main__':
