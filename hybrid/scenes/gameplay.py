@@ -4,7 +4,6 @@ from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
 from actions import clear_puzzle, shift_left, shift_right, crossover, flip
-from .score import ScoreScene
 
 
 NUCLEOBASE_WIDTH = 8
@@ -34,6 +33,7 @@ class GameplayScene(Scene):
             self.store.dispatch(flip())
 
         if self.goal in (self.top_sequence, self.bottom_sequence):
+            from .score import ScoreScene
             self.store.dispatch(change_scene(ScoreScene))
 
     def draw(self):
