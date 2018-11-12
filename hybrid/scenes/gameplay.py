@@ -3,7 +3,7 @@ import pyxel
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
-from actions import clear_puzzle, shift_left, shift_right, crossover, flip
+import actions
 
 
 NUCLEOBASE_WIDTH = 8
@@ -20,17 +20,17 @@ class GameplayScene(Scene):
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
             from .start import StartScene
-            self.store.dispatch(clear_puzzle())
+            self.store.dispatch(actions.clear_puzzle())
             self.store.dispatch(change_scene(StartScene))
 
         if pyxel.btnp(pyxel.KEY_LEFT):
-            self.store.dispatch(shift_left())
+            self.store.dispatch(actions.shift_left())
         elif pyxel.btnp(pyxel.KEY_RIGHT):
-            self.store.dispatch(shift_right())
+            self.store.dispatch(actions.shift_right())
         elif pyxel.btnp(pyxel.KEY_SPACE):
-            self.store.dispatch(crossover())
+            self.store.dispatch(actions.crossover())
         elif pyxel.btnp(pyxel.KEY_TAB):
-            self.store.dispatch(flip())
+            self.store.dispatch(actions.flip())
 
         if self.goal in (self.top_sequence, self.bottom_sequence):
             from .score import ScoreScene
@@ -42,9 +42,8 @@ class GameplayScene(Scene):
 
         draw_crossover_highlight(self.crossover, len(self.top_sequence))
 
-        draw_sequence(self.top_sequence, PADDING, TOP_Y)
-        draw_sequence(self.bottom_sequence, PADDING, BOTTOM_Y)
-        draw_output(self.output, self.goal, PADDING, OUTPUT_Y)
+        draw_sequence(self.top_sequence, PADDING, TOP_Y, self.top_sequence == self.goal)
+        draw_sequence(self.bottom_sequence, PADDING, BOTTOM_Y, self.bottom_sequence == self.goal)
 
     @property
     def top_sequence(self):
@@ -67,17 +66,10 @@ class GameplayScene(Scene):
         return self.store.state['puzzle']['crossover']
 
 
-def draw_sequence(sequence, x, y):
+def draw_sequence(sequence, x, y, match):
     for i, nucleobase in enumerate(sequence):
         offset = i * (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING)
-        draw_nucleobase(nucleobase, x + offset, y)
-
-
-def draw_output(sequence, goal, x, y):
-    for i, nucleobase in enumerate(sequence):
-        offset = i * (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING)
-        match = nucleobase == goal[i]
-        draw_nucleobase(nucleobase, x + offset, y, match)
+        draw_nucleobase(nucleobase, x + offset, y, match=match)
 
 
 def draw_nucleobase(nucleobase, x, y, match=False):
@@ -92,6 +84,6 @@ def draw_crossover_highlight(crossover, sequence_length):
         PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * crossover - 1,
         TOP_Y - 2,
         PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * sequence_length - 1,
-        OUTPUT_Y + NUCLEOBASE_HEIGHT + 1,
+        TOP_Y + NUCLEOBASE_HEIGHT * 2 + 3,
         3
     )
