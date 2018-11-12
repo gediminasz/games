@@ -1,10 +1,25 @@
 {
     "puzzles": [
         {
+            "top": "AAAAA",
+            "bottom": "CAAAA",
+            "goal": "AAAAC",
+            "crossover": 4,
+            "description": "Use <left> or <right> buttons\nto shift the bottom DNA sequence."
+        },
+        {
             "top": "CCAA",
             "bottom": "TTAA",
             "goal": "AAAA",
-            "crossover": 2
+            "crossover": 2,
+            "description": "Use <space> to\ncrossover DNA sequences."
+        },
+        {
+            "top": "CCTT",
+            "bottom": "GGGG",
+            "goal": "TTCC",
+            "crossover": 2,
+            "description": "Use <tab> to\nflip DNA sequences."
         },
         {
             "top": "CCAA",

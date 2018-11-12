@@ -39,6 +39,8 @@ class GameplayScene(Scene):
     def draw(self):
         pyxel.cls(1)
         pyxel.text(PADDING, PADDING, f'Goal: {self.goal}', 7)
+        if 'description' in self.store.state['puzzle']:
+            pyxel.text(PADDING, PADDING * 2, self.store.state['puzzle']['description'], 12)
 
         draw_crossover_highlight(self.crossover, len(self.top_sequence))
 
