@@ -1,8 +1,6 @@
 import pyxel
 
-from pyxel_extensions import PALETTE
-from pyxel_extensions.scene import Scene
-from pyxel_extensions.actions import change_scene
+from pyxel_extensions import change_scene, PALETTE, Scene
 
 
 class StartScene(Scene):

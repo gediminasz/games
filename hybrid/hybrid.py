@@ -1,6 +1,6 @@
 import json
 
-from pyxel_extensions.game import Game
+from pyxel_extensions import Game
 import pyxel
 
 from actions import load_puzzles
