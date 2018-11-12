@@ -12,6 +12,8 @@ Guitar Hero clone, but you can play any song, similarly to Audiosurf. Supports R
 
 # Hybrid
 
+![hybrid](gifs/hybrid.gif)
+
 A game about splicing DNA. Made during Github's 2018 Game Off game jam, of which the theme was "hybrid".
 
 ## Controls
