@@ -1,5 +1,6 @@
 import pyxel
 
+from pyxel_extensions import PALETTE
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
@@ -14,7 +15,7 @@ class ScoreScene(GameplayScene):
 
     def draw(self):
         super().draw()
-        pyxel.rect(63, 38, 96, 46, 0)
-        pyxel.text(65, 40, 'Success!', 11)
-        pyxel.rect(23, 58, 136, 66, 0)
-        pyxel.text(25, 60, 'Press <space> to play again.', 6)
+        pyxel.rect(63, 38, 96, 46, PALETTE.BLACK)
+        pyxel.text(65, 40, 'Success!', PALETTE.GREEN)
+        pyxel.rect(23, 58, 136, 66, PALETTE.BLACK)
+        pyxel.text(25, 60, 'Press <space> to play again.', PALETTE.GRAY)

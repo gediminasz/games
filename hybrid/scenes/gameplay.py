@@ -1,5 +1,6 @@
 import pyxel
 
+from pyxel_extensions import PALETTE
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
@@ -38,9 +39,9 @@ class GameplayScene(Scene):
 
     def draw(self):
         pyxel.cls(1)
-        pyxel.text(PADDING, PADDING, f'Goal: {self.goal}', 7)
+        pyxel.text(PADDING, PADDING, f'Goal: {self.goal}', PALETTE.WHITE)
         if 'description' in self.store.state['puzzle']:
-            pyxel.text(PADDING, PADDING * 2, self.store.state['puzzle']['description'], 12)
+            pyxel.text(PADDING, PADDING * 2, self.store.state['puzzle']['description'], PALETTE.BLUE)
 
         draw_crossover_highlight(self.crossover, len(self.top_sequence))
 
@@ -78,7 +79,7 @@ def draw_nucleobase(nucleobase, x, y, match=False):
     index = NUCLEOBASE_ORDER.index(nucleobase)
     source_x = index * NUCLEOBASE_WIDTH
     source_y = NUCLEOBASE_HEIGHT if match else 0
-    pyxel.blt(x, y, 0, source_x, source_y, NUCLEOBASE_WIDTH, NUCLEOBASE_HEIGHT, 0)
+    pyxel.blt(x, y, 0, source_x, source_y, NUCLEOBASE_WIDTH, NUCLEOBASE_HEIGHT, PALETTE.BLACK)
 
 
 def draw_crossover_highlight(crossover, sequence_length):
@@ -87,5 +88,5 @@ def draw_crossover_highlight(crossover, sequence_length):
         TOP_Y - 2,
         PADDING + (NUCLEOBASE_WIDTH + NUCLEOBASE_PADDING) * sequence_length - 1,
         TOP_Y + NUCLEOBASE_HEIGHT * 2 + 3,
-        3
+        PALETTE.DARK_GREEN
     )

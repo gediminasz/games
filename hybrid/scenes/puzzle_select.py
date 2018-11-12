@@ -1,5 +1,6 @@
 import pyxel
 
+from pyxel_extensions import PALETTE
 from pyxel_extensions.scene import Scene
 from pyxel_extensions.actions import change_scene
 
@@ -30,7 +31,7 @@ class PuzzleSelectScene(Scene):
         for i, puzzle in enumerate(self.store.state['puzzles']):
             indicator = '>' if self.selected_puzzle == i else ' '
             label = f"{indicator}[{i:02}] {puzzle['top']} {puzzle['bottom']} -> {puzzle['goal']}"
-            pyxel.text(PADDING, (i + 1) * PADDING, label, 7)
+            pyxel.text(PADDING, (i + 1) * PADDING, label, PALETTE.WHITE)
 
     @property
     def selected_puzzle(self):
